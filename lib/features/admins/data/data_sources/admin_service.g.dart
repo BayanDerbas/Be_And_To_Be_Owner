@@ -9,7 +9,9 @@ part of 'admin_service.dart';
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element,unnecessary_string_interpolations,unused_element_parameter
 
 class _AdminService implements AdminService {
-  _AdminService(this._dio, {this.baseUrl, this.errorLogger});
+  _AdminService(this._dio, {this.baseUrl, this.errorLogger}) {
+    baseUrl ??= 'http://127.0.0.1:8000/api';
+  }
 
   final Dio _dio;
 
@@ -37,6 +39,43 @@ class _AdminService implements AdminService {
     late AdminResponse _value;
     try {
       _value = AdminResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<AddAdminModel> add_admin(
+    String fullname,
+    String password,
+    String phonenumber,
+    int branch_id,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'fullname': fullname,
+      r'password': password,
+      r'phonenumber': phonenumber,
+      r'branch_id': branch_id,
+    };
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<AddAdminModel>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            'http://127.0.0.1:8000/api/AddAdmin',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late AddAdminModel _value;
+    try {
+      _value = AddAdminModel.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;

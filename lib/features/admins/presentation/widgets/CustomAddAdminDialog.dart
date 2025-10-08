@@ -46,6 +46,11 @@ class CustomAddAdminDialog extends StatelessWidget {
                   decoration: InputDecoration(hintText: 'رقم الهاتف'),
                 ),
                 const SizedBox(height: 10),
+                TextField(
+                  controller: passwordController,
+                  decoration: InputDecoration(hintText: 'كلمة السر'),
+                ),
+                const SizedBox(height: 10),
                 Container(
                   height: 48,
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),

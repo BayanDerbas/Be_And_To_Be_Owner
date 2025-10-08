@@ -35,14 +35,6 @@ class CustomAdminHeaderRow extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
           ),
-          Expanded(
-            flex: 1,
-            child: Text(
-              "الإجراءات",
-              style: TextStyle(color: Colors.amber, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-          ),
         ],
       ),
     );
