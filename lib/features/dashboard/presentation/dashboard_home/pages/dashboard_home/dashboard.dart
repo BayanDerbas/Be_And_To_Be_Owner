@@ -44,17 +44,17 @@ class DashboardPage extends StatelessWidget {
                       const SizedBox(height: 30),
                       CustomMenuItem(
                         icon: Icons.admin_panel_settings,
-                        title: "admins",
+                        title: "الادارة",
                         onTap: () => context.go('/admin'),
                       ),
                       CustomMenuItem(
                         icon: Icons.store,
-                        title: "branches",
+                        title: "الفروع",
                         onTap: () => context.go('/branches'),
                       ),
                       CustomMenuItem(
                         icon: Icons.fastfood,
-                        title: "categories",
+                        title: "الأصناف",
                         onTap: () => context.go('/categories'),
                       ),
                       const Spacer(),

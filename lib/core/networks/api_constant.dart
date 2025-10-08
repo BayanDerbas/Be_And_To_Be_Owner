@@ -5,6 +5,7 @@ class ApiConstant {
   static const String login = "$baseUrl/auth/login";
   static const String logout = "$baseUrl/auth/logout";
   static const String refresh = "$baseUrl/auth/refresh";
+  static const String get_admins = "$baseUrl/show_admins_withbranches";
   //add main catogries
   static const String add_main_categories = "$baseUrl/AddMainCategories";
 

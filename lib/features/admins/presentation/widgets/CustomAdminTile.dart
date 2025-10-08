@@ -4,7 +4,6 @@ import 'package:untitled/core/constants/app_colors.dart';
 class CustomAdminTile extends StatelessWidget {
   final String name;
   final String phone;
-  final String password;
   final String branch;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
@@ -13,7 +12,6 @@ class CustomAdminTile extends StatelessWidget {
     super.key,
     required this.name,
     required this.phone,
-    required this.password,
     required this.branch,
     required this.onEdit,
     required this.onDelete,
@@ -35,10 +33,6 @@ class CustomAdminTile extends StatelessWidget {
             Expanded(
               flex: 2,
               child: Text(phone, style: const TextStyle(color: Colors.white), textAlign: TextAlign.center),
-            ),
-            Expanded(
-              flex: 2,
-              child: Text(password, style: const TextStyle(color: Colors.white), textAlign: TextAlign.center),
             ),
             Expanded(
               flex: 2,

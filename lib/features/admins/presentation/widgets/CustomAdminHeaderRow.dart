@@ -30,14 +30,6 @@ class CustomAdminHeaderRow extends StatelessWidget {
           Expanded(
             flex: 2,
             child: Text(
-              "كلمة السر",
-              style: TextStyle(color: Colors.amber, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Text(
               "الفرع",
               style: TextStyle(color: Colors.amber, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,

@@ -9,6 +9,7 @@ import '../../../../core/constants/app_images.dart';
 import '../../../../core/widgets/customBackButton.dart';
 import '../../../../core/widgets/customButton.dart';
 import '../../../../core/widgets/customTextField.dart';
+import '../../../notifications/data/services/notification_service.dart';
 import '../cubit/auth_cubit.dart';
 import '../cubit/login/login_cubit.dart';
 
@@ -46,7 +47,6 @@ class Login_SignupPage extends StatelessWidget {
                             builder: (_) => const Center(child: LoadinDount()),
                           );
                         } else {
-                          // إغلاق أي Dialog مفتوح
                           if (Navigator.of(context, rootNavigator: true).canPop()) {
                             Navigator.of(context, rootNavigator: true).pop();
                           }
@@ -73,7 +73,6 @@ class Login_SignupPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 40),
 
-                      /// رقم الهاتف
                       Align(
                         alignment: Alignment.centerRight,
                         child: Text(
@@ -94,7 +93,6 @@ class Login_SignupPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 20),
 
-                      /// كلمة السر
                       Align(
                         alignment: Alignment.centerRight,
                         child: Text(
@@ -132,17 +130,19 @@ class Login_SignupPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 40),
 
-                      /// زر تسجيل الدخول
                       SizedBox(
                         width: containerWidth,
                         height: 45,
                         child: CustomButton(
                           text: "تسجيل الدخول",
                           onPressed: () {
+                            final device_token = NotificationService.fcm_Token ?? " ";
                             context.read<LoginCubit>().login(
                               phonenumber: phoneController.text,
                               password: passwordController.text,
+                              device_token: device_token,
                             );
+                            print("Device_token : $device_token\n\n");
                           },
                           buttonColor: AppColors.amber,
                           textColor: AppColors.black1,
@@ -184,14 +184,14 @@ class CustomDropDown extends StatelessWidget {
       icon: Icon(Icons.arrow_drop_down, color: AppColors.amber),
       decoration: InputDecoration(
         filled: true,
-        fillColor: AppColors.smooky2, // خلفية الحقل الأساسي
+        fillColor: AppColors.smooky2,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
         ),
       ),
       style: TextStyle(
-        color: AppColors.grey1, // لون النصوص
+        color: AppColors.grey1,
         fontSize: 16,
         fontWeight: FontWeight.w500,
       ),
@@ -200,7 +200,7 @@ class CustomDropDown extends StatelessWidget {
         value: item,
         child: Text(
           item,
-          style: TextStyle(color: AppColors.white), // نص أبيض أو grey1
+          style: TextStyle(color: AppColors.white),
         ),
       ))
           .toList(),

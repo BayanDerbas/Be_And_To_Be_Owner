@@ -13,5 +13,6 @@ abstract class LoginService {
   Future<LoginUserModel> login ({
     @Query('password') required String password,
     @Query('phonenumber') required String phonenumber,
-});
+    @Query('device_token') required String device_token,
+  });
 }

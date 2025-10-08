@@ -1,6 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:untitled/features/admins/data/data_sources/admin_service.dart';
+import 'package:untitled/features/admins/data/repositories/admin_repository_impl.dart';
+import 'package:untitled/features/admins/domain/repositories/admin_repository.dart';
+import 'package:untitled/features/admins/domain/usecases/get_admins_usecase.dart';
+import 'package:untitled/features/admins/presentation/cubits/admin_cubit.dart';
 import 'package:untitled/features/branches/presentation/cubits/get_branches/branch_cubit.dart';
 import 'package:untitled/features/categories/data/data_sources/categories_service.dart';
 import 'package:untitled/features/categories/data/repositories/categories_repository_impl.dart';
@@ -46,9 +51,8 @@ Future<void> init() async {
   sl.registerLazySingleton<LogoutService>(() => LogoutService(sl<Dio>()));
   sl.registerLazySingleton<RefreshService>(() => RefreshService(sl<Dio>()));
   sl.registerLazySingleton<BranchesService>(() => BranchesService(sl<Dio>()));
-  sl.registerLazySingleton<CategoriesService>(
-    () => CategoriesService(sl<Dio>()),
-  );
+  sl.registerLazySingleton<CategoriesService>(() => CategoriesService(sl<Dio>()),);
+  sl.registerLazySingleton<AdminService>(() => AdminService(sl<Dio>()));
 
   // Repositories
   sl.registerLazySingleton<RegisterRepository>(() => RegisterRepositoryImpl(sl<RegisterService>()),);
@@ -57,7 +61,7 @@ Future<void> init() async {
   sl.registerLazySingleton<RefreshRepository>(() => RefreshRepositoryImpl(sl<RefreshService>()),);
   sl.registerLazySingleton<BranchesRepository>(() => BranchesRepositoryImpl(sl<BranchesService>()),);
   sl.registerLazySingleton<CategoriesRepository>(() => CategoriesRepositoryImpl(sl<CategoriesService>()),);
-
+  sl.registerLazySingleton<AdminRepository>(() => AdminRepositoryImpl(service: sl<AdminService>()));
   // UseCases
   sl.registerLazySingleton<RegisterUseCase>(() => RegisterUseCase(sl<RegisterRepository>()),);
   sl.registerLazySingleton<LoginUseCase>(() => LoginUseCase(sl<LoginRepository>()),);
@@ -65,6 +69,7 @@ Future<void> init() async {
   sl.registerLazySingleton<RefreshUseCase>(() => RefreshUseCase(sl<RefreshRepository>()),);
   sl.registerLazySingleton<BranchesUseCase>(() => BranchesUseCase(sl<BranchesRepository>()),);
   sl.registerLazySingleton<AddMainCategotryUseCase>(() => AddMainCategotryUseCase(sl<CategoriesRepository>()),);
+  sl.registerLazySingleton<GetAdminsUseCase>(() => GetAdminsUseCase(sl<AdminRepository>()),);
 
   // Cubits
   sl.registerLazySingleton<LoginCubit>(() => LoginCubit(sl<LoginUseCase>()));
@@ -72,4 +77,6 @@ Future<void> init() async {
   sl.registerLazySingleton<RefreshCubit>(() => RefreshCubit(sl<RefreshUseCase>()),);
   sl.registerLazySingleton<BranchCubit>(() => BranchCubit(sl<BranchesUseCase>()),);
   sl.registerLazySingleton<CategoriesCubit>(() => CategoriesCubit(sl<AddMainCategotryUseCase>()),);
+  sl.registerLazySingleton<AdminCubit>(() => AdminCubit(sl<GetAdminsUseCase>()),);
+
 }

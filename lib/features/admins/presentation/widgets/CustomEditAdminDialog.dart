@@ -5,7 +5,6 @@ import '../../../../../../core/constants/app_colors.dart';
 class CustomEditAdminDialog extends StatelessWidget {
   final TextEditingController nameController;
   final TextEditingController phoneController;
-  final TextEditingController passwordController;
   final TextEditingController branchController;
   final VoidCallback onSave;
   final List<BranchEntity> branches;
@@ -17,7 +16,6 @@ class CustomEditAdminDialog extends StatelessWidget {
     required this.onSave,
     required this.nameController,
     required this.phoneController,
-    required this.passwordController,
     required this.branchController,
     required this.branches,
     this.selectedBranch,
@@ -68,11 +66,6 @@ class CustomEditAdminDialog extends StatelessWidget {
                 TextField(
                   controller: phoneController,
                   decoration: _inputDecoration('رقم الهاتف'),
-                ),
-                const SizedBox(height: 10),
-                TextField(
-                  controller: passwordController,
-                  decoration: _inputDecoration('كلمة السر'),
                 ),
                 const SizedBox(height: 10),
                 TextField(
