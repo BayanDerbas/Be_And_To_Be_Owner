@@ -26,8 +26,8 @@ class BranchCubit extends Cubit<BranchState> {
     );
   }
 
-  void selectBranch(BranchEntity branch) {
+  void selectBranch(BranchEntity? branch) {
     selectedBranch = branch;
-    emit(BranchSelected(branch));
+    emit(BranchSelected(branch!));
   }
 }

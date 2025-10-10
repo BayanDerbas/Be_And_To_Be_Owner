@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:untitled/core/networks/failures.dart';
+import 'package:untitled/features/categories/domain/entities/category_entity.dart';
 import '../../domain/repositories/categories_repository.dart';
 import '../data_sources/categories_service.dart';
 import '../../domain/entities/add_category_entity.dart';
@@ -53,6 +54,19 @@ class CategoriesRepositoryImpl implements CategoriesRepository {
       }
       return Left(Failure("Something went wrong"));
     } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<CategoryEntity>>> getCategories({required int branch_id}) async {
+    try {
+      final response = await service.getMainCategories(branch_id);
+      final entity = response.allCategories.map((t) => t.toEntity()).toList();
+      return Right(entity);
+    } on DioException catch(e){
+      return Left(Failure.fromDioError(e));
+    } catch(e){
       return Left(Failure(e.toString()));
     }
   }

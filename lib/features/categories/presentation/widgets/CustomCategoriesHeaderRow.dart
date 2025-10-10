@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:untitled/core/constants/app_colors.dart';
 
 class CustomCategoriesHeaderRow extends StatelessWidget {
@@ -8,7 +9,7 @@ class CustomCategoriesHeaderRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: AppColors.smooky,
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+      padding:  EdgeInsets.symmetric(vertical: 12.h, horizontal: 8.w),
       child: Row(
         children: const [
           Expanded(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:untitled/core/constants/app_colors.dart';
 
 class CustomAdminHeaderRow extends StatelessWidget {
@@ -8,7 +9,7 @@ class CustomAdminHeaderRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: AppColors.smooky,
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      padding:  EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
       child: Row(
         children: const [
           Expanded(

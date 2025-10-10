@@ -12,7 +12,8 @@ import 'package:untitled/features/categories/data/data_sources/categories_servic
 import 'package:untitled/features/categories/data/repositories/categories_repository_impl.dart';
 import 'package:untitled/features/categories/domain/repositories/categories_repository.dart';
 import 'package:untitled/features/categories/domain/usecases/add_main_category_usecase.dart';
-import 'package:untitled/features/categories/presentation/cubits/categories_cubit.dart';
+import 'package:untitled/features/categories/domain/usecases/get_categories_usecase.dart';
+import 'package:untitled/features/categories/presentation/cubits/get_categories/get_categories_cubit.dart';
 import '../../features/auth/data/data_sources/login/login_service.dart';
 import '../../features/auth/data/data_sources/logout/logout_service.dart';
 import '../../features/auth/data/data_sources/refresh/refresh_service.dart';
@@ -36,6 +37,7 @@ import '../../features/branches/data/data_sources/branches_service.dart';
 import '../../features/branches/data/repositories/branches_repository_impl.dart';
 import '../../features/branches/domain/repositories/branches_repository.dart';
 import '../../features/branches/domain/usecases/branches_usecase.dart';
+import '../../features/categories/presentation/cubits/add_category/categories_cubit.dart';
 import '../networks/dio_factory.dart';
 
 final sl = GetIt.instance;
@@ -72,6 +74,7 @@ Future<void> init() async {
   sl.registerLazySingleton<AddMainCategotryUseCase>(() => AddMainCategotryUseCase(sl<CategoriesRepository>()),);
   sl.registerLazySingleton<GetAdminsUseCase>(() => GetAdminsUseCase(sl<AdminRepository>()),);
   sl.registerLazySingleton<AddAdminUseCase>(() => AddAdminUseCase(sl<AdminRepository>()),);
+  sl.registerLazySingleton<GetCategoriesUseCase>(() => GetCategoriesUseCase(sl<CategoriesRepository>()),);
 
   // Cubits
   sl.registerLazySingleton<LoginCubit>(() => LoginCubit(sl<LoginUseCase>()));
@@ -80,5 +83,5 @@ Future<void> init() async {
   sl.registerLazySingleton<BranchCubit>(() => BranchCubit(sl<BranchesUseCase>()),);
   sl.registerLazySingleton<CategoriesCubit>(() => CategoriesCubit(sl<AddMainCategotryUseCase>()),);
   sl.registerLazySingleton<AdminCubit>(() => AdminCubit(sl<GetAdminsUseCase>(),sl<AddAdminUseCase>()),);
-
+  sl.registerLazySingleton<GetCategoriesCubit>(() => GetCategoriesCubit(sl<GetCategoriesUseCase>()),);
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../branches/domain/entities/branch_entity.dart';
 
@@ -29,7 +30,7 @@ class CustomAddAdminDialog extends StatelessWidget {
       backgroundColor: AppColors.smooky,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: SizedBox(
-        width: 300,
+        width: 300.w,
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: SingleChildScrollView(
@@ -52,7 +53,7 @@ class CustomAddAdminDialog extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 Container(
-                  height: 48,
+                  height: 48.h,
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                   decoration: BoxDecoration(
                     color: AppColors.smooky2,

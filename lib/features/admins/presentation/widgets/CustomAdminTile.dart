@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:untitled/core/constants/app_colors.dart';
 
 class CustomAdminTile extends StatelessWidget {
@@ -17,7 +18,7 @@ class CustomAdminTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       color: AppColors.smooky2,
-      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      margin:  EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         child: Row(

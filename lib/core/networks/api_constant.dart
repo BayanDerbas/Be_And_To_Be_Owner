@@ -6,13 +6,11 @@ class ApiConstant {
   static const String logout = "$baseUrl/auth/logout";
   static const String refresh = "$baseUrl/auth/refresh";
   static const String get_admins = "$baseUrl/show_admins_withbranches";
-  //add main catogries
   static const String add_main_categories = "$baseUrl/AddMainCategories";
-
   static const String add_admin = "$baseUrl/AddAdmin";
   static const String branch = "$baseUrl/show_branches";
-  static const String categories = "$baseUrl//getmaincategories/1";
-  static const String request = "$baseUrl/getmaincategories";
+  static const String getcategories = "$baseUrl/show_main_categories";
+
   static const String getMeals = "$baseUrl/getmealsofcategory";
   static const String getTypesOfMeals = "$baseUrl/gettypesofmeal";
 }

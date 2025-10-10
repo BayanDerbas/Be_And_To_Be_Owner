@@ -9,7 +9,6 @@ import '../../presentation/cubits/admin_cubit.dart';
 import '../widgets/CustomAddAdminDialog.dart';
 import '../widgets/CustomAdminHeaderRow.dart';
 import '../widgets/CustomAdminTile.dart';
-import '../widgets/CustomEditAdminDialog.dart';
 import '../../../../core/di/injection.dart';
 
 class AdminsPage extends StatelessWidget {
@@ -66,7 +65,7 @@ class AdminsPage extends StatelessWidget {
           ),
           body: Column(
             children: [
-              const CustomAdminHeaderRow(),
+              CustomAdminHeaderRow(),
               Expanded(
                 child: BlocBuilder<AdminCubit, AdminState>(
                   builder: (context, state) {
