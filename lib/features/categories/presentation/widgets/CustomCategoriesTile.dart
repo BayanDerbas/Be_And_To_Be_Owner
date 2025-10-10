@@ -6,7 +6,6 @@ class CustomCategoriesTile extends StatelessWidget {
   final String name;
   final String image;
   final String branch;
-  final VoidCallback onEdit;
   final VoidCallback onDelete;
 
   const CustomCategoriesTile({
@@ -14,7 +13,6 @@ class CustomCategoriesTile extends StatelessWidget {
     required this.name,
     required this.image,
     required this.branch,
-    required this.onEdit,
     required this.onDelete,
   });
 
@@ -69,24 +67,12 @@ class CustomCategoriesTile extends StatelessWidget {
             flex: 1,
             child: FittedBox(
               fit: BoxFit.scaleDown,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                    onPressed: onEdit,
-                    icon:  Icon(Icons.edit, color: Colors.white, size: 20),
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                  ),
-                  SizedBox(width: 6.w),
-                  IconButton(
-                    onPressed: onDelete,
-                    icon: const Icon(Icons.delete,
-                        color: Colors.redAccent, size: 20),
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                  ),
-                ],
+              child: IconButton(
+                onPressed: onDelete,
+                icon: const Icon(Icons.delete,
+                    color: Colors.redAccent, size: 20),
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
               ),
             ),
           ),

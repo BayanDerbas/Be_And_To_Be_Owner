@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:untitled/core/networks/failures.dart';
 import 'package:untitled/features/categories/domain/entities/category_entity.dart';
+import 'package:untitled/features/categories/domain/entities/delete_main_category_entity.dart';
 import '../../domain/repositories/categories_repository.dart';
 import '../data_sources/categories_service.dart';
 import '../../domain/entities/add_category_entity.dart';
@@ -64,6 +65,18 @@ class CategoriesRepositoryImpl implements CategoriesRepository {
       final response = await service.getMainCategories(branch_id);
       final entity = response.allCategories.map((t) => t.toEntity()).toList();
       return Right(entity);
+    } on DioException catch(e){
+      return Left(Failure.fromDioError(e));
+    } catch(e){
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, DeleteMainCategoryEntity>> deleteMainCategory({required int main_category_id}) async{
+    try {
+      final response = await service.deleteMainCategories(main_category_id);
+      return Right(response);
     } on DioException catch(e){
       return Left(Failure.fromDioError(e));
     } catch(e){

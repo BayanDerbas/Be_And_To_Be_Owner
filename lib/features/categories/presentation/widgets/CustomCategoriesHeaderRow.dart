@@ -39,7 +39,7 @@ class CustomCategoriesHeaderRow extends StatelessWidget {
           Expanded(
             flex: 1,
             child: Text(
-              "إجراءات",
+              "",
               style: TextStyle(color: AppColors.amber, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
