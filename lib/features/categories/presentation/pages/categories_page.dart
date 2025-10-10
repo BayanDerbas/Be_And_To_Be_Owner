@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:untitled/core/networks/api_constant.dart';
 import 'package:untitled/features/branches/presentation/cubits/get_branches/branch_cubit.dart';
 import 'package:untitled/features/categories/presentation/cubits/delete_category/delete_category_cubit.dart';
@@ -63,10 +61,9 @@ class CategoriesPage extends StatelessWidget {
       body: Directionality(
         textDirection: TextDirection.rtl,
         child: Padding(
-          padding: const EdgeInsets.all(12.0),
+          padding: EdgeInsets.all(12.r),
           child: Column(
             children: [
-              // Branch Dropdown
               BlocBuilder<BranchCubit, BranchState>(
                 builder: (context, state) {
                   if (state is BranchLoading) return const SizedBox.shrink();
@@ -137,7 +134,8 @@ class CategoriesPage extends StatelessWidget {
                       if (state is GetCategoriesLoading) return const Center(child: CircularProgressIndicator());
                       if (state is GetCategoriesSuccess) {
                         final categories = state.categories;
-                        if (categories.isEmpty) return const Center(
+                        if (categories.isEmpty)
+                          return const Center(
                           child: Text(
                             "لا توجد أصناف لهذا الفرع.",
                             style: TextStyle(color: AppColors.grey1),

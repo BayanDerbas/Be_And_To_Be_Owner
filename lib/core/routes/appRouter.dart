@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:untitled/core/utils/secure_storage.dart';
+import 'package:untitled/features/branches/presentation/pages/branches_page.dart';
 import 'package:untitled/features/categories/presentation/pages/categories_page.dart';
 import '../../features/admins/presentation/cubits/admin_cubit.dart';
 import '../../features/auth/presentation/pages/login&signup.dart';
@@ -33,7 +34,7 @@ class AppRouter {
             path: '/branches',
             builder:
                 (context, state) =>
-                    const Center(child: Text("📦 Branches Page")),
+                    BranchesPage(),
           ),
           GoRoute(
             path: '/categories',

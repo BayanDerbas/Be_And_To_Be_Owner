@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:untitled/core/utils/secure_storage.dart';
 import '../../../../../../core/constants/app_colors.dart';
@@ -31,17 +32,24 @@ class DashboardPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       const SizedBox(height: 40),
-                      Center(
-                        child: Text(
-                          "لوحة التحكم",
-                          style: TextStyle(
-                            color: AppColors.amber,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "لوحة التحكم",
+                            style: TextStyle(
+                              color: AppColors.amber,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
+                          SizedBox(width: 5.w,),
+                          IconButton(onPressed: (){
+                            context.go('/dash');
+                          }, icon: Icon(Icons.water_damage_sharp)),
+                        ],
                       ),
-                      const SizedBox(height: 30),
+                      SizedBox(height: 30.h),
                       CustomMenuItem(
                         icon: Icons.admin_panel_settings,
                         title: "الادارة",
@@ -59,7 +67,7 @@ class DashboardPage extends StatelessWidget {
                       ),
                       const Spacer(),
                       Padding(
-                        padding: const EdgeInsets.all(12.0),
+                        padding: EdgeInsets.all(12.0.r),
                         child: ElevatedButton.icon(
                           onPressed: () async {
                             await SecureStorage.deleteToken();
