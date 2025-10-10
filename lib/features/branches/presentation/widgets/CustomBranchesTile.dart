@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:untitled/core/constants/app_colors.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CustomBranchesTile extends StatelessWidget {
   final String name;
   final String image;
-  final String socialmedia;
+  final String socialmediaInstagram;
+  final String socialmediaFacebook;
   final String location;
   final String numbers;
   final VoidCallback onDelete;
@@ -14,10 +16,20 @@ class CustomBranchesTile extends StatelessWidget {
     super.key,
     required this.name,
     required this.image,
-    required this.socialmedia,
+    required this.socialmediaInstagram,
+    required this.socialmediaFacebook,
     required this.onDelete,
-    required this.location, required this.numbers,
+    required this.location,
+    required this.numbers,
   });
+
+  // helper to open links safely
+  Future<void> _launchURL(String url) async {
+    final uri = Uri.tryParse(url);
+    if (uri != null && await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +39,7 @@ class CustomBranchesTile extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 12.h),
       child: Row(
         children: [
+          // name
           Expanded(
             flex: 2,
             child: Text(
@@ -37,15 +50,15 @@ class CustomBranchesTile extends StatelessWidget {
             ),
           ),
 
+          // image
           Expanded(
             flex: 2,
             child: Center(
               child: CircleAvatar(
                 radius: 35.r,
                 backgroundColor: AppColors.grey2.withOpacity(0.3),
-                backgroundImage: image.isNotEmpty
-                    ? NetworkImage(image)
-                    : null,
+                backgroundImage:
+                image.isNotEmpty ? NetworkImage(image) : null,
                 child: image.isEmpty
                     ? Icon(Icons.image_not_supported,
                     color: AppColors.grey1, size: 35)
@@ -54,24 +67,66 @@ class CustomBranchesTile extends StatelessWidget {
             ),
           ),
 
+          // social media
           Expanded(
             flex: 2,
-            child: Text(
-              socialmedia,
-              style: const TextStyle(color: AppColors.white),
-              textAlign: TextAlign.center,
-              overflow: TextOverflow.ellipsis,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                socialmediaInstagram.isNotEmpty
+                    ? GestureDetector(
+                  onTap: () => _launchURL(socialmediaInstagram),
+                  child: const Text(
+                    'Instagram',
+                    style: TextStyle(
+                      color: Colors.blueAccent,
+                      decoration: TextDecoration.underline,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                )
+                    : const SizedBox.shrink(),
+                SizedBox(height: 4.h),
+                socialmediaFacebook.isNotEmpty
+                    ? GestureDetector(
+                  onTap: () => _launchURL(socialmediaFacebook),
+                  child: const Text(
+                    'Facebook',
+                    style: TextStyle(
+                      color: Colors.blueAccent,
+                      decoration: TextDecoration.underline,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                )
+                    : const SizedBox.shrink(),
+              ],
             ),
           ),
+
+          // location (clickable)
           Expanded(
             flex: 2,
-            child: Text(
-              location,
-              style: const TextStyle(color: AppColors.white),
+            child: location.isNotEmpty
+                ? GestureDetector(
+              onTap: () => _launchURL(location),
+              child: Text(
+                location,
+                style: const TextStyle(
+                  color: Colors.blueAccent,
+                  decoration: TextDecoration.underline,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            )
+                : const Text(
+              ' ',
+              style: TextStyle(color: AppColors.white),
               textAlign: TextAlign.center,
-              overflow: TextOverflow.ellipsis,
             ),
           ),
+
+          // phone numbers
           Expanded(
             flex: 2,
             child: Text(
@@ -81,7 +136,8 @@ class CustomBranchesTile extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          /// Actions
+
+          // delete button
           Expanded(
             flex: 1,
             child: FittedBox(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:untitled/features/admins/presentation/cubits/admin_cubit.dart';
+import 'package:untitled/features/branches/presentation/cubits/add_branch/add_branch_cubit.dart';
 import 'package:untitled/features/categories/presentation/cubits/delete_category/delete_category_cubit.dart';
 import 'package:untitled/features/categories/presentation/cubits/get_categories/get_categories_cubit.dart';
 import 'config/ResponsiveUI/responsiveConfig.dart';
@@ -50,7 +51,7 @@ class MyApp extends StatelessWidget {
             BlocProvider<AdminCubit>(create: (_) => di.sl<AdminCubit>()),
             BlocProvider<DeleteCategoryCubit>(create: (_) => di.sl<DeleteCategoryCubit>()),
             BlocProvider<GetCategoriesCubit>(create: (_) => di.sl<GetCategoriesCubit>()),
-
+            BlocProvider<AddBranchCubit>(create: (_) => di.sl<AddBranchCubit>()),
           ],
           child: Builder(
             builder: (context) {

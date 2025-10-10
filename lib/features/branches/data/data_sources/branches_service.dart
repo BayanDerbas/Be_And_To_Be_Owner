@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 import '../../../../core/networks/api_constant.dart';
+import '../models/add_branch_response_model.dart';
 import '../models/branches_model.dart';
 
 part 'branches_service.g.dart';
@@ -11,4 +12,9 @@ abstract class BranchesService{
 
   @GET(ApiConstant.branch)
   Future<BranchesModel> getBranches();
+
+  @POST(ApiConstant.addbranch)
+  @MultiPart()
+  Future<AddBranchResponseModel> addBranch({@Body() required FormData data});
+
 }

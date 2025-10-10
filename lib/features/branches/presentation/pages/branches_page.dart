@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:untitled/config/animations/loading.dart';
 import 'package:untitled/core/networks/api_constant.dart';
 import 'package:untitled/features/branches/presentation/cubits/get_branches/branch_cubit.dart';
+import 'package:untitled/features/branches/presentation/widgets/CustomAddBranchDialog.dart';
 import 'package:untitled/features/branches/presentation/widgets/CustomBranchesHeaderRow.dart';
 import 'package:untitled/features/branches/presentation/widgets/CustomBranchesTile.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../cubits/add_branch/add_branch_cubit.dart';
 
 class BranchesPage extends StatelessWidget {
   const BranchesPage({super.key});
@@ -14,14 +17,70 @@ class BranchesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final branchCubit = context.read<BranchCubit>();
+    final addBranchCubit = context.read<AddBranchCubit>();
+
+    // Initial fetch
+    Future.microtask(() => branchCubit.fetchBranches());
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.smooky,
-        title: const Text(
+        title: Text(
           'الفروع',
           style: TextStyle(color: AppColors.amber, fontSize: 20),
         ),
         elevation: 0,
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.amber,
+        child: Icon(Icons.add, color: Colors.white, size: 30.r),
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return BlocProvider.value(
+                value: addBranchCubit,
+                child: BlocListener<AddBranchCubit, AddBranchState>(
+                  listener: (context, state) {
+                    if (state is AddBranchSuccess) {
+                      // Refresh the branches list after successful addition
+                      branchCubit.fetchBranches();
+                    }
+                  },
+                  child: CustomAddBranchDialog(
+                    onAdd: ({
+                      required String name,
+                      required String length,
+                      required String width,
+                      String? instagram,
+                      String? facebook,
+                      required List<String> phones,
+                      required XFile image,
+                    }) {
+                      final double? parsedLength = double.tryParse(length);
+                      final double? parsedWidth = double.tryParse(width);
+                      if (name.isEmpty ||
+                          parsedLength == null ||
+                          parsedWidth == null ||
+                          phones.isEmpty ||
+                          image.path.isEmpty) return;
+
+                      context.read<AddBranchCubit>().addBranch(
+                        branchName: name,
+                        image: image,
+                        numbers: phones,
+                        length: parsedLength,
+                        width: parsedWidth,
+                        facebook: facebook,
+                        instagram: instagram,
+                      );
+                    },
+                  ),
+                ),
+              );
+            },
+          );
+        },
       ),
       body: Directionality(
         textDirection: TextDirection.rtl,
@@ -64,6 +123,7 @@ class BranchesPage extends StatelessWidget {
                           final locationUrl = hasValidLocation
                               ? 'https://maps.google.com/?q=${branch.length},${branch.width}'
                               : '';
+
                           return Card(
                             color: AppColors.smooky2,
                             margin: EdgeInsets.symmetric(vertical: 6.h),
@@ -73,10 +133,10 @@ class BranchesPage extends StatelessWidget {
                             child: CustomBranchesTile(
                               name: branch.branch_name ?? 'بدون اسم',
                               image: '${ApiConstant.imageBase}${branch.image}',
-                              socialmedia:
-                              '${branch.instagramtoken ?? ""}:Instagram\n${branch.facebooktoken ?? ""}:Facebook',
+                              socialmediaInstagram: branch.instagramtoken ?? '',
+                              socialmediaFacebook: branch.facebooktoken ?? '',
                               onDelete: () {},
-                              location:locationUrl,
+                              location: locationUrl,
                               numbers: phoneNumbers,
                             ),
                           );
