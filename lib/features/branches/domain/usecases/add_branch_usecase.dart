@@ -24,6 +24,8 @@ class AddBranchUseCase {
       length: length,
       width: width,
       numbers: numbers,
+      facebooktoken: facebooktoken,
+      instagramtoken: instagramtoken
     );
   }
 }

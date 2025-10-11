@@ -113,7 +113,6 @@ class _CustomAddBranchDialogState extends State<CustomAddBranchDialog> {
                           phones: _phoneControllers.map((c) => c.text.trim()).toList(),
                           image: pickedImage!,
                         );
-                        // ❌ REMOVE context.pop() from here
                       }
                           : null,
                       child: const Text("حفظ", style: TextStyle(color: Colors.white)),

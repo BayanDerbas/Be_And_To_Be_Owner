@@ -23,6 +23,7 @@ class BranchesRepositoryImpl implements BranchesRepository {
       return Left(Failure(e.toString()));
     }
   }
+
   @override
   Future<Either<Failure, AddBranchResponseEntity>> addBranch({
     required String branch_name,
@@ -34,21 +35,25 @@ class BranchesRepositoryImpl implements BranchesRepository {
     required List<String> numbers,
   }) async {
     try {
-      MultipartFile multipart;
+      print("FACEBOOK: $facebooktoken");
+      print("INSTAGRAM: $instagramtoken");
+
       final formData = FormData();
 
-      formData.fields
-        ..add(MapEntry('branch_name', branch_name))
-        ..add(MapEntry('length', length.toString()))
-        ..add(MapEntry('width', width.toString()))
-        ..add(MapEntry('facebooktoken', (facebooktoken?.trim().isEmpty ?? true) ? 'default_facebook' : facebooktoken!.trim()))
-        ..add(MapEntry('instagramtoken', (instagramtoken?.trim().isEmpty ?? true) ? 'default_instagram' : instagramtoken!.trim()));
+      formData.fields.add(MapEntry('branch_name', branch_name));
+      formData.fields.add(MapEntry('length', length.toString()));
+      formData.fields.add(MapEntry('width', width.toString()));
+      formData.fields.add(MapEntry('facebooktoken', facebooktoken ?? ''));
+      formData.fields.add(MapEntry('instagramtoken', instagramtoken ?? ''));
+      print("FACEBOOK: $facebooktoken");
+      print("INSTAGRAM: $instagramtoken");
 
 
-      for (int i = 0; i < numbers.length; i++) {
-        formData.fields.add(MapEntry('phones[$i]', numbers[i]));
+      for (var phone in numbers) {
+        formData.fields.add(MapEntry('phones[]', phone));
       }
 
+      MultipartFile multipart;
       if (kIsWeb) {
         final bytes = await image.readAsBytes();
         multipart = MultipartFile.fromBytes(bytes, filename: image.name);
@@ -56,9 +61,9 @@ class BranchesRepositoryImpl implements BranchesRepository {
         multipart = await MultipartFile.fromFile(image.path, filename: image.name);
       }
       formData.files.add(MapEntry('image', multipart));
+
       final response = await service.addBranch(formData);
       return Right(response);
-
     } on DioException catch (e) {
       if (e.response?.data != null && e.response?.data['errors'] != null) {
         final errors = e.response!.data['errors'] as Map<String, dynamic>;

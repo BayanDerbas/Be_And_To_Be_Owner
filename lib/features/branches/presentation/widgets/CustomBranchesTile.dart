@@ -10,7 +10,7 @@ class CustomBranchesTile extends StatelessWidget {
   final String socialmediaFacebook;
   final String location;
   final String numbers;
-  final VoidCallback onDelete;
+  final VoidCallback onEdit;
 
   const CustomBranchesTile({
     super.key,
@@ -18,7 +18,7 @@ class CustomBranchesTile extends StatelessWidget {
     required this.image,
     required this.socialmediaInstagram,
     required this.socialmediaFacebook,
-    required this.onDelete,
+    required this.onEdit,
     required this.location,
     required this.numbers,
   });
@@ -143,9 +143,9 @@ class CustomBranchesTile extends StatelessWidget {
             child: FittedBox(
               fit: BoxFit.scaleDown,
               child: IconButton(
-                onPressed: onDelete,
-                icon: const Icon(Icons.delete,
-                    color: Colors.redAccent, size: 20),
+                onPressed: onEdit,
+                icon: const Icon(Icons.edit,
+                    color: AppColors.white, size: 20),
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
               ),

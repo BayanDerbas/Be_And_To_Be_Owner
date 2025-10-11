@@ -47,35 +47,33 @@ class BranchesPage extends StatelessWidget {
                     }
                   },
                   child: CustomAddBranchDialog(
-                    onAdd: ({
-                      required String name,
-                      required String length,
-                      required String width,
-                      required String instagramtoken,
-                      required String facebooktoken,
-                      required List<String> phones,
-                      required XFile image,
-                    }) {
-                      final double? parsedLength = double.tryParse(length);
-                      final double? parsedWidth = double.tryParse(width);
+                      onAdd: ({
+                        required String name,
+                        required String length,
+                        required String width,
+                        required String instagramtoken,
+                        required String facebooktoken,
+                        required List<String> phones,
+                        required XFile image,
+                      }) {
+                        final double? parsedLength = double.tryParse(length);
+                        final double? parsedWidth = double.tryParse(width);
 
-                      if (name.isEmpty ||
-                          parsedLength == null ||
-                          parsedWidth == null ||
-                          phones.isEmpty ||
-                          image.path.isEmpty) return;
-                      print('instagram : ${instagramtoken}');
-                      context.read<AddBranchCubit>().addBranch(
-                        branchName: name,
-                        image: image,
-                        numbers: phones,
-                        length: parsedLength,
-                        width: parsedWidth,
-                        facebooktoken: facebooktoken.trim().isEmpty ? '' : facebooktoken.trim(),
-                        instagramtoken: instagramtoken.trim().isEmpty ? '' : instagramtoken.trim(),
-                      );
-                    },
-                  ),
+                        if (name.isEmpty || parsedLength == null || parsedWidth == null || phones.isEmpty || image.path.isEmpty) {
+                          return;
+                        }
+
+                        context.read<AddBranchCubit>().addBranch(
+                          branchName: name,
+                          image: image,
+                          numbers: phones,
+                          length: parsedLength,
+                          width: parsedWidth,
+                          facebooktoken: facebooktoken,
+                          instagramtoken: instagramtoken,
+                        );
+                      },
+                   ),
                 ),
               );
             },
@@ -144,7 +142,7 @@ class BranchesPage extends StatelessWidget {
                                 branch.instagramtoken ?? '',
                                 socialmediaFacebook:
                                 branch.facebooktoken ?? '',
-                                onDelete: () {},
+                                onEdit: () {},
                                 location: locationUrl,
                                 numbers: phoneNumbers,
                               ),
