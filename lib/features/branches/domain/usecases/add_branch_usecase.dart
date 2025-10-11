@@ -14,8 +14,8 @@ class AddBranchUseCase {
     required XFile image,
     required double length,
     required double width,
-    String? facebook,
-    String? instagram,
+    String? facebooktoken,
+    String? instagramtoken,
     required List<String> numbers,
   }) async {
     return repository.addBranch(

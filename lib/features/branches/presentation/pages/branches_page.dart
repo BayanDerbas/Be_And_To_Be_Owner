@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:untitled/config/animations/loading.dart';
 import 'package:untitled/core/networks/api_constant.dart';
@@ -17,15 +18,13 @@ class BranchesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final branchCubit = context.read<BranchCubit>();
-    final addBranchCubit = context.read<AddBranchCubit>();
-
-    // Initial fetch
+    final addbranch = context.read<AddBranchCubit>();
     Future.microtask(() => branchCubit.fetchBranches());
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.smooky,
-        title: Text(
+        title: const Text(
           'الفروع',
           style: TextStyle(color: AppColors.amber, fontSize: 20),
         ),
@@ -39,12 +38,12 @@ class BranchesPage extends StatelessWidget {
             context: context,
             builder: (context) {
               return BlocProvider.value(
-                value: addBranchCubit,
+                value: addbranch,
                 child: BlocListener<AddBranchCubit, AddBranchState>(
                   listener: (context, state) {
                     if (state is AddBranchSuccess) {
-                      // Refresh the branches list after successful addition
                       branchCubit.fetchBranches();
+                      context.pop();
                     }
                   },
                   child: CustomAddBranchDialog(
@@ -52,27 +51,28 @@ class BranchesPage extends StatelessWidget {
                       required String name,
                       required String length,
                       required String width,
-                      String? instagram,
-                      String? facebook,
+                      required String instagramtoken,
+                      required String facebooktoken,
                       required List<String> phones,
                       required XFile image,
                     }) {
                       final double? parsedLength = double.tryParse(length);
                       final double? parsedWidth = double.tryParse(width);
+
                       if (name.isEmpty ||
                           parsedLength == null ||
                           parsedWidth == null ||
                           phones.isEmpty ||
                           image.path.isEmpty) return;
-
+                      print('instagram : ${instagramtoken}');
                       context.read<AddBranchCubit>().addBranch(
                         branchName: name,
                         image: image,
                         numbers: phones,
                         length: parsedLength,
                         width: parsedWidth,
-                        facebook: facebook,
-                        instagram: instagram,
+                        facebooktoken: facebooktoken.trim().isEmpty ? '' : facebooktoken.trim(),
+                        instagramtoken: instagramtoken.trim().isEmpty ? '' : instagramtoken.trim(),
                       );
                     },
                   ),
@@ -88,7 +88,7 @@ class BranchesPage extends StatelessWidget {
           padding: EdgeInsets.all(12.r),
           child: Column(
             children: [
-              CustomBranchesHeaderRow(),
+              const CustomBranchesHeaderRow(),
               SizedBox(height: 10.h),
               Expanded(
                 child: BlocBuilder<BranchCubit, BranchState>(
@@ -108,39 +108,49 @@ class BranchesPage extends StatelessWidget {
                         );
                       }
 
-                      return ListView.builder(
-                        itemCount: branches.length,
-                        itemBuilder: (context, index) {
-                          final branch = branches[index];
-                          final phoneNumbers = branch.phonenumbers
-                              .map((n) => n.phone.toString())
-                              .join('\n');
-                          final hasValidLocation = branch.length != null &&
-                              branch.width != null &&
-                              branch.length != 0 &&
-                              branch.width != 0;
-
-                          final locationUrl = hasValidLocation
-                              ? 'https://maps.google.com/?q=${branch.length},${branch.width}'
-                              : '';
-
-                          return Card(
-                            color: AppColors.smooky2,
-                            margin: EdgeInsets.symmetric(vertical: 6.h),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12.r),
-                            ),
-                            child: CustomBranchesTile(
-                              name: branch.branch_name ?? 'بدون اسم',
-                              image: '${ApiConstant.imageBase}${branch.image}',
-                              socialmediaInstagram: branch.instagramtoken ?? '',
-                              socialmediaFacebook: branch.facebooktoken ?? '',
-                              onDelete: () {},
-                              location: locationUrl,
-                              numbers: phoneNumbers,
-                            ),
-                          );
+                      return RefreshIndicator(
+                        onRefresh: () async {
+                          await branchCubit.fetchBranches();
                         },
+                        child: ListView.builder(
+                          itemCount: branches.length,
+                          itemBuilder: (context, index) {
+                            final branch = branches[index];
+                            final phoneNumbers = branch.phonenumbers
+                                .map((n) => n.phone.toString())
+                                .join('\n');
+
+                            final hasValidLocation =
+                                branch.length != null &&
+                                    branch.width != null &&
+                                    branch.length != 0 &&
+                                    branch.width != 0;
+
+                            final locationUrl = hasValidLocation
+                                ? 'https://maps.google.com/?q=${branch.length},${branch.width}'
+                                : '';
+
+                            return Card(
+                              color: AppColors.smooky2,
+                              margin: EdgeInsets.symmetric(vertical: 6.h),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12.r),
+                              ),
+                              child: CustomBranchesTile(
+                                name: branch.branch_name ?? 'بدون اسم',
+                                image:
+                                '${ApiConstant.imageBase}${branch.image}',
+                                socialmediaInstagram:
+                                branch.instagramtoken ?? '',
+                                socialmediaFacebook:
+                                branch.facebooktoken ?? '',
+                                onDelete: () {},
+                                location: locationUrl,
+                                numbers: phoneNumbers,
+                              ),
+                            );
+                          },
+                        ),
                       );
                     }
 

@@ -10,8 +10,8 @@ class CustomAddBranchDialog extends StatefulWidget {
   required String name,
   required String length,
   required String width,
-  required String instagram,
-  required String facebook,
+  required String instagramtoken,
+  required String facebooktoken,
   required List<String> phones,
   required XFile image,
   }) onAdd;
@@ -105,19 +105,20 @@ class _CustomAddBranchDialogState extends State<CustomAddBranchDialog> {
                       onPressed: pickedImage != null
                           ? () {
                         widget.onAdd(
-                          name: _nameController.text,
-                          length: _lengthController.text,
-                          width: _widthController.text,
-                          instagram: _instagramController.text,
-                          facebook: _facebookController.text,
-                          phones: _phoneControllers.map((c) => c.text).toList(),
+                          name: _nameController.text.trim(),
+                          length: _lengthController.text.trim(),
+                          width: _widthController.text.trim(),
+                          instagramtoken: _instagramController.text.trim(),
+                          facebooktoken: _facebookController.text.trim(),
+                          phones: _phoneControllers.map((c) => c.text.trim()).toList(),
                           image: pickedImage!,
                         );
-                        context.pop();
+                        // ❌ REMOVE context.pop() from here
                       }
                           : null,
                       child: const Text("حفظ", style: TextStyle(color: Colors.white)),
                     ),
+
                   ],
                 ),
               ],

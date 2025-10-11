@@ -14,7 +14,8 @@ abstract class BranchesService{
   Future<BranchesModel> getBranches();
 
   @POST(ApiConstant.addbranch)
-  @MultiPart()
-  Future<AddBranchResponseModel> addBranch({@Body() required FormData data});
+  Future<AddBranchResponseModel> addBranch(@Body() FormData data);
 
+// @POST(ApiConstant.addbranch)
+  // Future<AddBranchResponseModel> addBranch({@Body() required FormData data});
 }

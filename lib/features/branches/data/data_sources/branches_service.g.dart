@@ -47,18 +47,13 @@ class _BranchesService implements BranchesService {
   }
 
   @override
-  Future<AddBranchResponseModel> addBranch({required FormData data}) async {
+  Future<AddBranchResponseModel> addBranch(FormData data) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = data;
     final _options = _setStreamType<AddBranchResponseModel>(
-      Options(
-            method: 'POST',
-            headers: _headers,
-            extra: _extra,
-            contentType: 'multipart/form-data',
-          )
+      Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
             'http://127.0.0.1:8000/api/addbranch',

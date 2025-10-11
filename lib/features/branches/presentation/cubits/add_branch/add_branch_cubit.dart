@@ -19,8 +19,8 @@ class AddBranchCubit extends Cubit<AddBranchState> {
     required List<String> numbers,
     required double length,
     required double width,
-    String? facebook,
-    String? instagram,
+    String? facebooktoken,
+    String? instagramtoken,
   }) async {
     emit(AddBranchLoading());
 
@@ -30,8 +30,8 @@ class AddBranchCubit extends Cubit<AddBranchState> {
       numbers: numbers,
       length: length,
       width: width,
-      facebook: facebook,
-      instagram: instagram,
+      facebooktoken: facebooktoken,
+      instagramtoken: instagramtoken,
     );
 
     result.fold(
@@ -39,4 +39,5 @@ class AddBranchCubit extends Cubit<AddBranchState> {
           (response) => emit(AddBranchSuccess(message: "تمت إضافة الفرع بنجاح")),
     );
   }
+
 }
