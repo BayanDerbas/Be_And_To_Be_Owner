@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:untitled/features/branches/domain/entities/add_branch_response_entity.dart';
+import 'package:untitled/features/branches/domain/entities/edit_branch_name_entity.dart';
 import '../../../../core/networks/failures.dart';
 import '../entities/branches_entity.dart';
 
@@ -16,4 +17,10 @@ abstract class BranchesRepository{
     String? instagramtoken,
     required List<String> numbers,
   });
+
+  Future <Either<Failure,EditBranchNameEntity>> editBranch ({
+    required String new_name,
+    required int branch_id,
+});
+
 }

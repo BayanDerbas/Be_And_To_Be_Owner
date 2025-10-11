@@ -12,7 +12,8 @@ class ApiConstant {
   static const String getcategories = "$baseUrl/show_main_categories";
   static const String deletecategories = "$baseUrl/deletemaincategory";
   static const String addbranch = "$baseUrl/addbranch";
-  
+  static const String edit_branch_name = "$baseUrl/edit_branch_name";
+
   static const String getMeals = "$baseUrl/getmealsofcategory";
   static const String getTypesOfMeals = "$baseUrl/gettypesofmeal";
 }

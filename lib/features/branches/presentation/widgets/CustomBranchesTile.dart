@@ -23,7 +23,6 @@ class CustomBranchesTile extends StatelessWidget {
     required this.numbers,
   });
 
-  // helper to open links safely
   Future<void> _launchURL(String url) async {
     final uri = Uri.tryParse(url);
     if (uri != null && await canLaunchUrl(uri)) {
