@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import '../constants/app_colors.dart';
 
-class CustomDropDown<T> extends StatelessWidget {
+class CustomDropDown<T> extends StatefulWidget {
   final T? value;
   final String hintText;
   final List<T> items;
@@ -20,6 +19,11 @@ class CustomDropDown<T> extends StatelessWidget {
   });
 
   @override
+  State<CustomDropDown<T>> createState() => _CustomDropDownState<T>();
+}
+
+class _CustomDropDownState<T> extends State<CustomDropDown<T>> {
+  @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
@@ -30,13 +34,13 @@ class CustomDropDown<T> extends StatelessWidget {
       padding:  EdgeInsets.symmetric(horizontal: 12.w),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<T>(
-          value: value,
+          value: widget.value,
           isExpanded: true,
           borderRadius: BorderRadius.circular(14.r),
           dropdownColor: AppColors.smooky2,
           icon: const Icon(Icons.arrow_drop_down, color: AppColors.amber),
           hint: Text(
-            hintText,
+            widget.hintText,
             style: const TextStyle(
               color: AppColors.grey1,
               fontSize: 16,
@@ -44,16 +48,16 @@ class CustomDropDown<T> extends StatelessWidget {
             ),
             textAlign: TextAlign.right,
           ),
-          items: items.map((item) {
+          items: widget.items.map((item) {
             return DropdownMenuItem<T>(
               value: item,
               child: Text(
-                getLabel(item),
+                widget.getLabel(item),
                 style: const TextStyle(color: AppColors.white),
               ),
             );
           }).toList(),
-          onChanged: onChanged,
+          onChanged: widget.onChanged,
         ),
       ),
     );

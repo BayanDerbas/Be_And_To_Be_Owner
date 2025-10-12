@@ -24,3 +24,10 @@ class GetCategoriesFailure extends GetCategoriesState {
   @override
   List<Object?> get props => [message];
 }
+
+class CategorySelected extends GetCategoriesState {
+  final CategoryEntity category;
+  CategorySelected(this.category);
+  @override
+  List<Object?> get props => [category];
+}

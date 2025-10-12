@@ -7,13 +7,23 @@ part 'get_categories_state.dart';
 
 class GetCategoriesCubit extends Cubit<GetCategoriesState> {
   final GetCategoriesUseCase useCase;
+  CategoryEntity? selectedCategory;
+  List<CategoryEntity> categories = [];
+
   GetCategoriesCubit(this.useCase) : super(GetCategoriesInitial());
   Future<void> fetchCategories(int branchId) async {
     emit(GetCategoriesLoading());
     final result = await useCase.call(branch_id: branchId);
     result.fold(
           (failure) => emit(GetCategoriesFailure(message: failure.message)),
-          (categories) => emit(GetCategoriesSuccess(categories: categories)),
-    );
+          (categoriesList) {
+        categories = categoriesList;
+        selectedCategory = null;
+        emit(GetCategoriesSuccess(categories: categoriesList));
+      },    );
+  }
+  void selectaCategory(CategoryEntity? category) {
+    selectedCategory = category;
+    emit(CategorySelected(category!));
   }
 }

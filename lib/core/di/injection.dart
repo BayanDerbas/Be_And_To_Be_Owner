@@ -20,6 +20,16 @@ import 'package:untitled/features/categories/domain/usecases/delete_main_categor
 import 'package:untitled/features/categories/domain/usecases/get_categories_usecase.dart';
 import 'package:untitled/features/categories/presentation/cubits/delete_category/delete_category_cubit.dart';
 import 'package:untitled/features/categories/presentation/cubits/get_categories/get_categories_cubit.dart';
+import 'package:untitled/features/meals/data/data_sources/meal_service.dart';
+import 'package:untitled/features/meals/data/data_sources/meal_types_service.dart';
+import 'package:untitled/features/meals/data/repositories/meal_repository_impl.dart';
+import 'package:untitled/features/meals/data/repositories/meal_types_repository_impl.dart';
+import 'package:untitled/features/meals/domain/repositories/get_types_of_meal_repository.dart';
+import 'package:untitled/features/meals/domain/repositories/meal_repository.dart';
+import 'package:untitled/features/meals/domain/usecases/get_meals_of_category_usecase.dart';
+import 'package:untitled/features/meals/domain/usecases/get_types_of_meal_usecase.dart';
+import 'package:untitled/features/meals/presentation/cubits/meal_types_cubit/meal_types_cubit.dart';
+import 'package:untitled/features/meals/presentation/cubits/meals/meals_cubit.dart';
 import '../../features/auth/data/data_sources/login/login_service.dart';
 import '../../features/auth/data/data_sources/logout/logout_service.dart';
 import '../../features/auth/data/data_sources/refresh/refresh_service.dart';
@@ -62,6 +72,8 @@ Future<void> init() async {
   sl.registerLazySingleton<BranchesService>(() => BranchesService(sl<Dio>()));
   sl.registerLazySingleton<CategoriesService>(() => CategoriesService(sl<Dio>()),);
   sl.registerLazySingleton<AdminService>(() => AdminService(sl<Dio>()));
+  sl.registerLazySingleton<MealService>(() => MealService(sl<Dio>()));
+  sl.registerLazySingleton<MealTypesService>(() => MealTypesService(sl<Dio>()));
 
   // Repositories
   sl.registerLazySingleton<RegisterRepository>(() => RegisterRepositoryImpl(sl<RegisterService>()),);
@@ -71,6 +83,9 @@ Future<void> init() async {
   sl.registerLazySingleton<BranchesRepository>(() => BranchesRepositoryImpl(sl<BranchesService>()),);
   sl.registerLazySingleton<CategoriesRepository>(() => CategoriesRepositoryImpl(sl<CategoriesService>()),);
   sl.registerLazySingleton<AdminRepository>(() => AdminRepositoryImpl(service: sl<AdminService>()));
+  sl.registerLazySingleton<MealRepository>(() => MealRepositoryImpl(sl<MealService>()));
+  sl.registerLazySingleton<MealTypesRepository>(() => MealTypesRepositoryImpl(sl<MealTypesService>()));
+
   // UseCases
   sl.registerLazySingleton<RegisterUseCase>(() => RegisterUseCase(sl<RegisterRepository>()),);
   sl.registerLazySingleton<LoginUseCase>(() => LoginUseCase(sl<LoginRepository>()),);
@@ -84,6 +99,8 @@ Future<void> init() async {
   sl.registerLazySingleton<DeleteMainCategotryUseCase>(() => DeleteMainCategotryUseCase(sl<CategoriesRepository>()),);
   sl.registerLazySingleton<AddBranchUseCase>(() => AddBranchUseCase(repository: sl<BranchesRepository>()),);
   sl.registerLazySingleton<EditBranchUseCase>(() => EditBranchUseCase(sl<BranchesRepository>()),);
+  sl.registerLazySingleton<GetMealOfCategoryUseCase>(() => GetMealOfCategoryUseCase(sl<MealRepository>()),);
+  sl.registerLazySingleton<GetTypesOfMealUseCase>(() => GetTypesOfMealUseCase(sl<MealTypesRepository>()),);
 
   // Cubits
   sl.registerLazySingleton<LoginCubit>(() => LoginCubit(sl<LoginUseCase>()));
@@ -96,5 +113,7 @@ Future<void> init() async {
   sl.registerLazySingleton<DeleteCategoryCubit>(() => DeleteCategoryCubit(sl<DeleteMainCategotryUseCase>()));
   sl.registerLazySingleton<AddBranchCubit>(() => AddBranchCubit(addBranchUseCase: sl<AddBranchUseCase>()));
   sl.registerLazySingleton<EditBranchCubit>(() => EditBranchCubit(sl<EditBranchUseCase>()));
+  sl.registerLazySingleton<MealsCubit>(() => MealsCubit(sl<GetMealOfCategoryUseCase>()));
+  sl.registerLazySingleton<MealTypesCubit>(() => MealTypesCubit(sl<GetTypesOfMealUseCase>()));
 
 }

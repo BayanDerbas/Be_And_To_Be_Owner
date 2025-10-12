@@ -153,8 +153,6 @@ class Login_SignupPage extends StatelessWidget {
                   ),
                 ),
               ),
-
-              /// زر رجوع
               CustomBackButton(onTap: () => context.go('/home')),
             ],
           ),
@@ -164,47 +162,3 @@ class Login_SignupPage extends StatelessWidget {
   }
 }
 
-class CustomDropDown extends StatelessWidget {
-  final String? value;
-  final List<String> items;
-  final ValueChanged<String?> onChanged;
-
-  const CustomDropDown({
-    super.key,
-    required this.value,
-    required this.items,
-    required this.onChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return DropdownButtonFormField<String>(
-      dropdownColor: AppColors.smooky2, // خلفية القائمة
-      value: value,
-      icon: Icon(Icons.arrow_drop_down, color: AppColors.amber),
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: AppColors.smooky2,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
-        ),
-      ),
-      style: TextStyle(
-        color: AppColors.grey1,
-        fontSize: 16,
-        fontWeight: FontWeight.w500,
-      ),
-      items: items
-          .map((item) => DropdownMenuItem<String>(
-        value: item,
-        child: Text(
-          item,
-          style: TextStyle(color: AppColors.white),
-        ),
-      ))
-          .toList(),
-      onChanged: onChanged,
-    );
-  }
-}

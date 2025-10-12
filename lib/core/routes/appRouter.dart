@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:untitled/core/utils/secure_storage.dart';
 import 'package:untitled/features/branches/presentation/pages/branches_page.dart';
 import 'package:untitled/features/categories/presentation/pages/categories_page.dart';
+import 'package:untitled/features/meals/presentation/pages/meals_page.dart';
 import '../../features/admins/presentation/cubits/admin_cubit.dart';
 import '../../features/auth/presentation/pages/login&signup.dart';
 import '../../features/branches/domain/usecases/branches_usecase.dart';
@@ -39,6 +40,10 @@ class AppRouter {
           GoRoute(
             path: '/categories',
             builder: (context, state) => CategoriesPage(),
+          ),
+          GoRoute(
+            path: '/meals',
+            builder: (context, state) => MealsPage(),
           ),
         ],
       ),
