@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/constants/app_colors.dart';
 
 class CustomMenuItem extends StatelessWidget {
@@ -21,8 +22,8 @@ class CustomMenuItem extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(8),
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        margin:  EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        padding:  EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         decoration: BoxDecoration(
           color: isActive ? AppColors.amber.withOpacity(0.2) : Colors.transparent,
           borderRadius: BorderRadius.circular(8),
@@ -33,7 +34,7 @@ class CustomMenuItem extends StatelessWidget {
               icon,
               color: isActive ? AppColors.amber : AppColors.white,
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12.w),
             Text(
               title,
               style: TextStyle(

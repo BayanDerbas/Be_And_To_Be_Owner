@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/constants/app_colors.dart';
 
 class CustomMealsHeaderRow extends StatelessWidget {
@@ -10,7 +9,7 @@ class CustomMealsHeaderRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: AppColors.smooky,
-      padding:  EdgeInsets.symmetric(vertical: 12.h, horizontal: 8.w),
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
       child: Container(
         height: 40,
         padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -40,6 +39,14 @@ class CustomMealsHeaderRow extends StatelessWidget {
               flex: 2,
               child: Text(
                 "التفاصيل",
+                style: TextStyle(color: AppColors.white, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Text(
+                "العمليات",
                 style: TextStyle(color: AppColors.white, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),

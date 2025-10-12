@@ -1,4 +1,6 @@
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
+import 'package:untitled/features/meals/domain/entities/delete_entity.dart';
 import '../../../../core/networks/failures.dart';
 import '../../domain/entities/meal_with_types_entity.dart';
 import '../../domain/repositories/get_types_of_meal_repository.dart';
@@ -30,6 +32,18 @@ class MealTypesRepositoryImpl implements MealTypesRepository {
       return Right(meals);
     } catch (e, st) {
       print("❌ [MealTypesRepository] Error: $e\n📌 Stacktrace: $st");
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, DeleteEntity>> deleteType({required int type_id}) async{
+    try {
+      final response = await service.deleteType(type_id);
+      return Right(response);
+    } on DioException catch(e){
+      return Left(Failure.fromDioError(e));
+    } catch(e){
       return Left(Failure(e.toString()));
     }
   }

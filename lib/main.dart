@@ -7,6 +7,9 @@ import 'package:untitled/features/branches/presentation/cubits/add_branch/add_br
 import 'package:untitled/features/branches/presentation/cubits/edit_branch/edit_branch_cubit.dart';
 import 'package:untitled/features/categories/presentation/cubits/delete_category/delete_category_cubit.dart';
 import 'package:untitled/features/categories/presentation/cubits/get_categories/get_categories_cubit.dart';
+import 'package:untitled/features/meals/presentation/cubits/add_meal/add_meal_cubit.dart';
+import 'package:untitled/features/meals/presentation/cubits/delete_meal/delete_meal_cubit.dart';
+import 'package:untitled/features/meals/presentation/cubits/delete_type/delete_type_cubit.dart';
 import 'package:untitled/features/meals/presentation/cubits/meal_types_cubit/meal_types_cubit.dart';
 import 'package:untitled/features/meals/presentation/cubits/meals/meals_cubit.dart';
 import 'config/ResponsiveUI/responsiveConfig.dart';
@@ -58,7 +61,9 @@ class MyApp extends StatelessWidget {
             BlocProvider<EditBranchCubit>(create: (_) => di.sl<EditBranchCubit>()),
             BlocProvider<MealsCubit>(create: (_) => di.sl<MealsCubit>()),
             BlocProvider<MealTypesCubit>(create: (_) => di.sl<MealTypesCubit>()),
-
+            BlocProvider<DeleteMealCubit>(create: (_) => di.sl<DeleteMealCubit>()),
+            BlocProvider<DeleteTypeCubit>(create: (_) => di.sl<DeleteTypeCubit>()),
+            BlocProvider<AddMealCubit>(create: (_) => di.sl<AddMealCubit>()),
           ],
           child: Builder(
             builder: (context) {

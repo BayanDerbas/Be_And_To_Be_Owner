@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:untitled/features/branches/presentation/cubits/get_branches/branch_cubit.dart';
 import 'package:untitled/features/categories/domain/entities/category_entity.dart';
 import 'package:untitled/features/categories/presentation/cubits/get_categories/get_categories_cubit.dart';
+import 'package:untitled/features/meals/domain/entities/meal_with_types_entity.dart';
+import 'package:untitled/features/meals/presentation/cubits/delete_meal/delete_meal_cubit.dart';
+import 'package:untitled/features/meals/presentation/cubits/delete_type/delete_type_cubit.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/networks/api_constant.dart';
 import '../../../../core/widgets/CustomDropDown.dart';
+import '../cubits/add_meal/add_meal_cubit.dart';
 import '../cubits/meal_types_cubit/meal_types_cubit.dart';
 import '../cubits/meals/meals_cubit.dart';
 import '../widgets/customMealsHeaderRow.dart';
@@ -21,12 +27,14 @@ class MealsPage extends StatelessWidget {
     final branchCubit = context.read<BranchCubit>();
     final categoriesCubit = context.read<GetCategoriesCubit>();
     final mealsCubit = context.read<MealsCubit>();
+    final deleteMeal = context.read<DeleteMealCubit>();
+    final deleteType = context.read<DeleteTypeCubit>();
+    final addMeal = context.read<AddMealCubit>();
 
-    // Fetch branches once
     WidgetsBinding.instance.addPostFrameCallback((_) {
       branchCubit.fetchBranches();
     });
-
+    
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.smooky,
@@ -71,18 +79,14 @@ class MealsPage extends StatelessWidget {
               },
             ),
 
-            SizedBox(height: 20.h),
+            SizedBox(height: 20),
             BlocBuilder<GetCategoriesCubit, GetCategoriesState>(
               builder: (context, state) {
                 final categories = categoriesCubit.categories; // always use cubit.categories
                 final selectedCategory = categoriesCubit.selectedCategory;
-
-                // Show loading
                 if (state is GetCategoriesLoading) {
                   return const Center(child: CircularProgressIndicator());
                 }
-
-                // Show dropdown even after selecting a category
                 return CustomDropDown<CategoryEntity>(
                   value: selectedCategory,
                   hintText: categories.isEmpty
@@ -100,7 +104,7 @@ class MealsPage extends StatelessWidget {
               },
             ),
 
-            SizedBox(height: 20.h),
+            SizedBox(height: 20),
 
             const CustomMealsHeaderRow(),
             Expanded(
@@ -115,27 +119,99 @@ class MealsPage extends StatelessWidget {
                       itemBuilder: (context, index) {
                         final meal = meals[index];
                         return GestureDetector(
-                          onTap: () {
-                            final mealTypesCubit =
-                            context.read<MealTypesCubit>();
-                            mealTypesCubit.getMealsTypes(meal.id);
-                            showDialog(
-                              context: context,
-                              builder: (_) {
-                                return BlocProvider.value(
-                                  value: mealTypesCubit,
-                                  child: MealTypesDialog(
-                                    mealName: meal.name,
-                                    mealImage: meal.image,
+                          onTap: () async {
+                            final mealTypesCubit = context.read<MealTypesCubit>();
+                            await mealTypesCubit.getMealsTypes(meal.id);
+                            final typeState = mealTypesCubit.state;
+
+                            if (typeState is MealTypesSuccess) {
+                              final mealsWithTypes = typeState.meals.cast<MealWithTypesEntity>();
+                              final mealWithType = mealsWithTypes.firstWhere(
+                                    (m) => m.id == meal.id,
+                                orElse: () => MealWithTypesEntity(
+                                  meal.id,
+                                  meal.name,
+                                  meal.image,
+                                  meal.description,
+                                  meal.maincategory_id,
+                                  [],
+                                ),
+                              );
+
+                              if (mealWithType.types != null && mealWithType.types!.isNotEmpty) {
+                                final type = mealWithType.types!.first;
+                                showDialog(
+                                  context: context,
+                                  builder: (dialogContext) => MealTypesDialog(
+                                    mealName: mealWithType.name,
+                                    mealImage: mealWithType.image,
+                                    description: mealWithType.description,
+                                    price: type.price,
+                                    extraPrice: type.supportprice,
+                                    availble: type.available.toString(),
+                                    onDelete: () async {
+                                      final scaffoldContext = context;
+                                      try {
+                                        await deleteType.deleteType(type.id);
+
+                                        ScaffoldMessenger.of(scaffoldContext).showSnackBar(
+                                          const SnackBar(
+                                            content: Text("تم حذف النوع بنجاح ✅"),
+                                            backgroundColor: AppColors.smooky2,
+                                            duration: Duration(seconds: 2),
+                                          ),
+                                        );
+                                        final mealTypesCubit = context.read<MealTypesCubit>();
+                                        await mealTypesCubit.getMealsTypes(meal.id);
+
+                                      } catch (e) {
+                                        ScaffoldMessenger.of(scaffoldContext).showSnackBar(
+                                          SnackBar(
+                                            content: Text("حدث خطأ أثناء الحذف ❌: $e"),
+                                            backgroundColor: Colors.red,
+                                            duration: const Duration(seconds: 2),
+                                          ),
+                                        );
+                                      }
+                                    },
+                                    onEdit: (int newPrice, int newExtraPrice) {  },
                                   ),
                                 );
-                              },
-                            );
+                              } else {
+                                showDialog(
+                                  context: context,
+                                  builder: (_) => const AlertDialog(
+                                    backgroundColor: AppColors.smooky,
+                                    content: Text(
+                                      "لا توجد أنواع متاحة لهذه الوجبة 🍽️",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                );
+                              }
+                            }
+                            else if (typeState is MealTypesFailure) {
+                              showDialog(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                  backgroundColor: AppColors.smooky,
+                                  content: Text(
+                                    "حدث خطأ أثناء جلب الأنواع: ${typeState.message}",
+                                    style: const TextStyle(color: Colors.redAccent),
+                                  ),
+                                ),
+                              );
+                            }
                           },
                           child: CustomMealsTile(
                             name: meal.name,
                             image: '${ApiConstant.imageBase}${meal.image}',
                             description: meal.description,
+                            onDelete: () async {
+                              await deleteMeal.deleteMeal(meal.id);
+                              mealsCubit.fetchMeals(categoriesCubit.selectedCategory?.id ?? 0);
+                            },
+                            onAdd: () async {},
                           ),
                         );
                       },
@@ -148,7 +224,6 @@ class MealsPage extends StatelessWidget {
                       ),
                     );
                   }
-
                   return const Center(
                     child: Text(
                       "اختر الفرع ثم الصنف لعرض الوجبات 🍽️",

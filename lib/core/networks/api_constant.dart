@@ -15,4 +15,8 @@ class ApiConstant {
   static const String edit_branch_name = "$baseUrl/edit_branch_name";
   static const String getMeals = "$baseUrl/show_meals";
   static const String getTypesOfMeals = "$baseUrl/show_types";
+  static const String deletemeal = "$baseUrl/deletemeal";
+  static const String deletetype = "$baseUrl/deletetype";
+  static const String AddMeals = "$baseUrl/AddMeals";
+  static const String editprice = "$baseUrl/editprice";
 }

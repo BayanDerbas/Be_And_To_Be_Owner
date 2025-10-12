@@ -5,12 +5,16 @@ class CustomMealsTile extends StatelessWidget {
   final String name;
   final String image;
   final String description;
+  final VoidCallback onDelete;
+  final VoidCallback onAdd;
 
   const CustomMealsTile({
     super.key,
     required this.name,
     required this.image,
     required this.description,
+    required this.onDelete,
+    required this.onAdd,
   });
 
   @override
@@ -97,11 +101,22 @@ class CustomMealsTile extends StatelessWidget {
               description,
               style: const TextStyle(
                 color: AppColors.white,
-                fontSize: 12,
+                fontSize: 13,
+                fontWeight: FontWeight.bold,
               ),
               textAlign: TextAlign.center,
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: Row(
+              children: [
+                IconButton(onPressed: onDelete, icon: Icon(Icons.delete,color: Colors.red,)),
+                SizedBox(width: 3,),
+                IconButton(onPressed: onAdd, icon: Icon(Icons.add,color: AppColors.green_,)),
+              ],
             ),
           ),
         ],
