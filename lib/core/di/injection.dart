@@ -29,11 +29,13 @@ import 'package:untitled/features/meals/domain/repositories/meal_repository.dart
 import 'package:untitled/features/meals/domain/usecases/add_meal_usecase.dart';
 import 'package:untitled/features/meals/domain/usecases/delete_meal_usecase.dart';
 import 'package:untitled/features/meals/domain/usecases/delete_type_usecase.dart';
+import 'package:untitled/features/meals/domain/usecases/edit_price_usecase.dart';
 import 'package:untitled/features/meals/domain/usecases/get_meals_of_category_usecase.dart';
 import 'package:untitled/features/meals/domain/usecases/get_types_of_meal_usecase.dart';
 import 'package:untitled/features/meals/presentation/cubits/add_meal/add_meal_cubit.dart';
 import 'package:untitled/features/meals/presentation/cubits/delete_meal/delete_meal_cubit.dart';
 import 'package:untitled/features/meals/presentation/cubits/delete_type/delete_type_cubit.dart';
+import 'package:untitled/features/meals/presentation/cubits/edit_price/edit_price_cubit.dart';
 import 'package:untitled/features/meals/presentation/cubits/meal_types_cubit/meal_types_cubit.dart';
 import 'package:untitled/features/meals/presentation/cubits/meals/meals_cubit.dart';
 import '../../features/auth/data/data_sources/login/login_service.dart';
@@ -110,7 +112,7 @@ Future<void> init() async {
   sl.registerLazySingleton<DeleteMealUseCase>(() => DeleteMealUseCase(sl<MealRepository>()),);
   sl.registerLazySingleton<DeleteTypeUseCase>(() => DeleteTypeUseCase(sl<MealTypesRepository>()),);
   sl.registerLazySingleton<AddMealUseCase>(() => AddMealUseCase(sl<MealRepository>()),);
-
+  sl.registerLazySingleton<EditPriceUseCase>(() => EditPriceUseCase(sl<MealTypesRepository>()));
   // Cubits
   sl.registerLazySingleton<LoginCubit>(() => LoginCubit(sl<LoginUseCase>()));
   sl.registerLazySingleton<LogoutCubit>(() => LogoutCubit(sl<LogoutUseCase>()));
@@ -127,5 +129,5 @@ Future<void> init() async {
   sl.registerLazySingleton<DeleteMealCubit>(() => DeleteMealCubit(sl<DeleteMealUseCase>()));
   sl.registerLazySingleton<DeleteTypeCubit>(() => DeleteTypeCubit(sl<DeleteTypeUseCase>()));
   sl.registerLazySingleton<AddMealCubit>(() => AddMealCubit(sl<AddMealUseCase>()));
-
+  sl.registerLazySingleton<EditPriceCubit>(() => EditPriceCubit(sl<EditPriceUseCase>()));
 }

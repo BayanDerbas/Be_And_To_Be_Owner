@@ -10,6 +10,7 @@ import 'package:untitled/features/categories/presentation/cubits/get_categories/
 import 'package:untitled/features/meals/presentation/cubits/add_meal/add_meal_cubit.dart';
 import 'package:untitled/features/meals/presentation/cubits/delete_meal/delete_meal_cubit.dart';
 import 'package:untitled/features/meals/presentation/cubits/delete_type/delete_type_cubit.dart';
+import 'package:untitled/features/meals/presentation/cubits/edit_price/edit_price_cubit.dart';
 import 'package:untitled/features/meals/presentation/cubits/meal_types_cubit/meal_types_cubit.dart';
 import 'package:untitled/features/meals/presentation/cubits/meals/meals_cubit.dart';
 import 'config/ResponsiveUI/responsiveConfig.dart';
@@ -64,6 +65,8 @@ class MyApp extends StatelessWidget {
             BlocProvider<DeleteMealCubit>(create: (_) => di.sl<DeleteMealCubit>()),
             BlocProvider<DeleteTypeCubit>(create: (_) => di.sl<DeleteTypeCubit>()),
             BlocProvider<AddMealCubit>(create: (_) => di.sl<AddMealCubit>()),
+            BlocProvider<EditPriceCubit>(create: (_) => di.sl<EditPriceCubit>()),
+
           ],
           child: Builder(
             builder: (context) {

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:untitled/core/widgets/customButton.dart';
 import 'package:untitled/features/branches/presentation/cubits/get_branches/branch_cubit.dart';
 import 'package:untitled/features/categories/domain/entities/category_entity.dart';
 import 'package:untitled/features/categories/presentation/cubits/get_categories/get_categories_cubit.dart';
@@ -14,6 +12,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/networks/api_constant.dart';
 import '../../../../core/widgets/CustomDropDown.dart';
 import '../cubits/add_meal/add_meal_cubit.dart';
+import '../cubits/edit_price/edit_price_cubit.dart';
 import '../cubits/meal_types_cubit/meal_types_cubit.dart';
 import '../cubits/meals/meals_cubit.dart';
 import '../widgets/customAddMealDialog.dart';
@@ -186,7 +185,6 @@ class MealsPage extends StatelessWidget {
                   ),
               ),
             ),
-
             SizedBox(height: 20),
             const CustomMealsHeaderRow(),
             Expanded(
@@ -276,11 +274,43 @@ class MealsPage extends StatelessWidget {
                                             );
                                           }
                                         },
-                                        onEdit:
-                                            (
-                                              int newPrice,
-                                              int newExtraPrice,
-                                            ) {},
+                                        onEdit: (int newPrice, int newExtraPrice) async {
+                                          final editPriceCubit = context.read<EditPriceCubit>();
+                                          final scaffoldContext = context;
+                                          try {
+                                            await editPriceCubit.editPrice(type.id, newPrice, newExtraPrice);
+                                            final state = editPriceCubit.state;
+                                            if (state is EditPriceSuccess) {
+                                              ScaffoldMessenger.of(scaffoldContext).showSnackBar(
+                                                const SnackBar(
+                                                  content: Text("تم تعديل السعر بنجاح ✅"),
+                                                  backgroundColor: AppColors.smooky2,
+                                                  duration: Duration(seconds: 2),
+                                                ),
+                                              );
+                                              final mealTypesCubit = context.read<MealTypesCubit>();
+                                              await mealTypesCubit.getMealsTypes(meal.id);
+                                              final mealsCubit = context.read<MealsCubit>();
+                                              mealsCubit.fetchMeals(categoriesCubit.selectedCategory?.id ?? 0);
+                                            } else if (state is EditPriceFailure) {
+                                              ScaffoldMessenger.of(scaffoldContext).showSnackBar(
+                                                SnackBar(
+                                                  content: Text("فشل تعديل السعر ❌: ${state.message}"),
+                                                  backgroundColor: Colors.red,
+                                                  duration: const Duration(seconds: 2),
+                                                ),
+                                              );
+                                            }
+                                          } catch (e) {
+                                            ScaffoldMessenger.of(scaffoldContext).showSnackBar(
+                                              SnackBar(
+                                                content: Text("حدث خطأ أثناء تعديل السعر ❌: $e"),
+                                                backgroundColor: Colors.red,
+                                                duration: const Duration(seconds: 2),
+                                              ),
+                                            );
+                                          }
+                                        },
                                       ),
                                 );
                               } else {
