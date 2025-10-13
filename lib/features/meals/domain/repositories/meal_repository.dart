@@ -8,17 +8,17 @@ import '../entities/meal_entity.dart';
 abstract class MealRepository {
   Future<Either<Failure,List<MealEntity>>> getMealsOfCategory (int maincategory_id);
   Future<Either<Failure,DeleteEntity>> deleteMeal({required int meal_id});
-  Future<Either<Failure,AddMealEntity>> addMeal({
+  Future<Either<Failure, AddMealEntity>> addMeal({
     int? hasTypes,
-    String mealname,
-    String description,
-    XFile image,
-    int maincategory_id,
-    int price,
-    int extraprice,
-    int textraprice,
-    List<String>? tname,
-    List <int>? tprice,
-    List<int>? ttextraprice,
-});
+    required String mealName,
+    required String description,
+    required XFile image,
+    required int mainCategoryId,
+    required int price,
+    int? extraPrice,
+    int? tExtraPrice,
+    List<String>? typeNames,
+    List<int>? typePrices,
+    List<int>? typeExtraPrices,
+  });
 }

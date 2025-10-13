@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
+import 'package:untitled/features/meals/data/models/add_meal_model.dart';
 import 'package:untitled/features/meals/data/models/delete_model.dart';
 import '../../../../core/networks/api_constant.dart';
 
@@ -10,11 +11,13 @@ abstract class MealTypesService {
   factory MealTypesService(Dio dio, {String baseUrl}) = _MealTypesService;
 
   @GET("${ApiConstant.getTypesOfMeals}/{meal_id}")
-  Future<HttpResponse<dynamic>> getTypesOfMeal(
-      @Path("meal_id") int meal_id,
-      );
+  Future<HttpResponse<dynamic>> getTypesOfMeal(@Path("meal_id") int meal_id);
   @POST('${ApiConstant.deletetype}/{type_id}')
-  Future<DeleteModel> deleteType(
-      @Path("type_id") int type_id,
-      );
+  Future<DeleteModel> deleteType(@Path("type_id") int type_id);
+  @POST(ApiConstant.editprice)
+  Future<AddMealModel> editPrice(
+    @Query("type_id") int type_id,
+    @Query("price") int price,
+    @Query("extraprice") int extraprice,
+  );
 }

@@ -12,35 +12,37 @@ class AddMealCubit extends Cubit<AddMealState> {
   AddMealCubit(this.addMealUseCase) : super(AddMealInitial());
 
   Future<void> addMeal({
-    int? hasTypes,
-    required String mealname,
+    required String mealName,
     required String description,
     required dynamic image,
-    required int maincategory_id,
+    required int mainCategoryId,
     required int price,
-    int? extraprice,
-    int? textraprice,
-    List<String>? tname,
-    List<int>? tprice,
-    List<int>? ttextraprice,
+    int? extraPrice,
+    int? tExtraPrice,
+    int? hasTypes,
+    List<String>? typeNames,
+    List<int>? typePrices,
+    List<int>? typeExtraPrices,
   }) async {
     emit(AddMealLoading());
     final result = await addMealUseCase.call(
       hasTypes: hasTypes,
-      mealname: mealname,
+      mealName: mealName,
       description: description,
       image: image,
-      maincategory_id: maincategory_id,
+      mainCategoryId: mainCategoryId,
       price: price,
-      extraprice: extraprice,
-      textraprice: textraprice,
-      tname: tname,
-      tprice: tprice,
-      ttextraprice: ttextraprice,
+      extraPrice: extraPrice,
+      tExtraPrice: tExtraPrice,
+      typeNames: typeNames,
+      typePrices: typePrices,
+      typeExtraPrices: typeExtraPrices,
     );
 
     result.fold(
-          (failure) => emit(AddMealFailure(failure.message)),
+          (failure) {
+            emit(AddMealFailure(failure.message));
+            },
           (meal) => emit(AddMealSuccess(meal)),
     );
   }

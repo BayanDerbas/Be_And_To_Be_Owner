@@ -4,7 +4,6 @@ import '../../../../core/constants/app_colors.dart';
 class CustomMealsHeaderRow extends StatelessWidget {
   const CustomMealsHeaderRow({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -17,10 +16,10 @@ class CustomMealsHeaderRow extends StatelessWidget {
           color: AppColors.smooky2,
           borderRadius: BorderRadius.circular(8),
         ),
-        child: Row(
-          children: const [
+        child: const Row(
+          children: [
             Expanded(
-              flex: 2,
+              flex: 3,
               child: Text(
                 "الاسم",
                 style: TextStyle(color: AppColors.white, fontWeight: FontWeight.bold),
@@ -28,7 +27,7 @@ class CustomMealsHeaderRow extends StatelessWidget {
               ),
             ),
             Expanded(
-              flex: 4,
+              flex: 3,
               child: Text(
                 "الصورة",
                 style: TextStyle(color: AppColors.white, fontWeight: FontWeight.bold),
@@ -36,9 +35,9 @@ class CustomMealsHeaderRow extends StatelessWidget {
               ),
             ),
             Expanded(
-              flex: 2,
+              flex: 4,
               child: Text(
-                "التفاصيل",
+                "الوصف",
                 style: TextStyle(color: AppColors.white, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
@@ -57,4 +56,3 @@ class CustomMealsHeaderRow extends StatelessWidget {
     );
   }
 }
-

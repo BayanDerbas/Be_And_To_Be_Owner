@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:untitled/features/meals/domain/entities/add_meal_entity.dart';
 import 'package:untitled/features/meals/domain/entities/delete_entity.dart';
 import '../../../../core/networks/failures.dart';
 import '../../domain/entities/meal_with_types_entity.dart';
@@ -40,6 +41,18 @@ class MealTypesRepositoryImpl implements MealTypesRepository {
   Future<Either<Failure, DeleteEntity>> deleteType({required int type_id}) async{
     try {
       final response = await service.deleteType(type_id);
+      return Right(response);
+    } on DioException catch(e){
+      return Left(Failure.fromDioError(e));
+    } catch(e){
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, AddMealEntity>> editPrice(int type_id, int price, int extraprice) async {
+    try {
+      final response = await service.editPrice(type_id, price, extraprice);
       return Right(response);
     } on DioException catch(e){
       return Left(Failure.fromDioError(e));

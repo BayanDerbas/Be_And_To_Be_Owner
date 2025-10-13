@@ -9,7 +9,6 @@ class CustomAddMealDialog extends StatefulWidget {
   required String mealName,
   required String description,
   required XFile image,
-  required int mainCategoryId,
   required int price,
   required int extraPrice,
   required int tExtraPrice,
@@ -19,6 +18,7 @@ class CustomAddMealDialog extends StatefulWidget {
   List<int>? typeExtraPrices,
   }) onAdd;
 
+
   const CustomAddMealDialog({super.key, required this.onAdd});
 
   @override
@@ -26,12 +26,11 @@ class CustomAddMealDialog extends StatefulWidget {
 }
 
 class _CustomAddMealDialogState extends State<CustomAddMealDialog> {
-  final TextEditingController _mealNameController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _mainCategoryIdController = TextEditingController();
-  final TextEditingController _priceController = TextEditingController();
-  final TextEditingController _extraPriceController = TextEditingController();
-  final TextEditingController _tExtraPriceController = TextEditingController();
+  final _mealNameController = TextEditingController();
+  final _descriptionController = TextEditingController();
+  final _priceController = TextEditingController();
+  final _extraPriceController = TextEditingController(text: "0");
+  final _tExtraPriceController = TextEditingController();
 
   XFile? _image;
   bool _hasTypes = false;
@@ -48,6 +47,7 @@ class _CustomAddMealDialogState extends State<CustomAddMealDialog> {
 
   void _addTypeField() {
     setState(() {
+      _hasTypes = true;
       _typeNameControllers.add(TextEditingController());
       _typePriceControllers.add(TextEditingController());
       _typeExtraPriceControllers.add(TextEditingController());
@@ -59,10 +59,14 @@ class _CustomAddMealDialogState extends State<CustomAddMealDialog> {
       _typeNameControllers.removeAt(index);
       _typePriceControllers.removeAt(index);
       _typeExtraPriceControllers.removeAt(index);
+      if (_typeNameControllers.isEmpty) {
+        _hasTypes = false;
+      }
     });
   }
 
-  Widget _buildField(String hint, TextEditingController controller, {TextInputType type = TextInputType.text}) {
+  Widget _buildField(String hint, TextEditingController controller,
+      {TextInputType type = TextInputType.text}) {
     return TextField(
       controller: controller,
       keyboardType: type,
@@ -76,7 +80,8 @@ class _CustomAddMealDialogState extends State<CustomAddMealDialog> {
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide.none,
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        contentPadding:
+        const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       ),
     );
   }
@@ -97,18 +102,39 @@ class _CustomAddMealDialogState extends State<CustomAddMealDialog> {
                 const SizedBox(height: 8),
                 _buildField("الوصف", _descriptionController),
                 const SizedBox(height: 8),
-                _buildField("معرف الصنف الرئيسي", _mainCategoryIdController, type: TextInputType.number),
+                _buildField("السعر", _priceController,
+                    type: TextInputType.number),
+                Row(
+                  children: [
+                    const Text("هل الوجبة مدعومة؟",
+                        style: TextStyle(color: Colors.white)),
+                    const Spacer(),
+                    StatefulBuilder(
+                      builder: (context, setSwitchState) {
+                        bool isSupported = _extraPriceController.text == "1";
+                        return Switch(
+                          value: isSupported,
+                          activeColor: AppColors.amber,
+                          onChanged: (val) {
+                            setSwitchState(() {
+                              _extraPriceController.text = val ? "1" : "0";
+                            });
+                          },
+                        );
+                      },
+                    ),
+                  ],
+                ),
+
                 const SizedBox(height: 8),
-                _buildField("السعر", _priceController, type: TextInputType.number),
-                const SizedBox(height: 8),
-                _buildField("السعر الإضافي", _extraPriceController, type: TextInputType.number),
-                const SizedBox(height: 8),
-                _buildField("السعر الإضافي للنوع", _tExtraPriceController, type: TextInputType.number),
+                _buildField("السعر الإضافي للنوع", _tExtraPriceController,
+                    type: TextInputType.number),
 
                 const SizedBox(height: 10),
                 Row(
                   children: [
-                    const Text("هل للوجبة أنواع؟", style: TextStyle(color: Colors.white)),
+                    const Text("هل للوجبة أنواع؟",
+                        style: TextStyle(color: Colors.white)),
                     Switch(
                       value: _hasTypes,
                       onChanged: (val) => setState(() => _hasTypes = val),
@@ -125,13 +151,23 @@ class _CustomAddMealDialogState extends State<CustomAddMealDialog> {
                           padding: const EdgeInsets.only(top: 8),
                           child: Row(
                             children: [
-                              Expanded(child: _buildField("اسم النوع", _typeNameControllers[i])),
+                              Expanded(
+                                  child: _buildField(
+                                      "اسم النوع", _typeNameControllers[i])),
                               const SizedBox(width: 5),
-                              Expanded(child: _buildField("سعر النوع", _typePriceControllers[i], type: TextInputType.number)),
+                              Expanded(
+                                  child: _buildField("سعر النوع",
+                                      _typePriceControllers[i],
+                                      type: TextInputType.number)),
                               const SizedBox(width: 5),
-                              Expanded(child: _buildField("سعر إضافي للنوع", _typeExtraPriceControllers[i], type: TextInputType.number)),
+                              Expanded(
+                                  child: _buildField(
+                                      "سعر المدعومة للنوع",
+                                      _typeExtraPriceControllers[i],
+                                      type: TextInputType.number)),
                               IconButton(
-                                icon: const Icon(Icons.remove_circle, color: Colors.red),
+                                icon: const Icon(Icons.remove_circle,
+                                    color: Colors.red),
                                 onPressed: () => _removeTypeField(i),
                               ),
                             ],
@@ -139,7 +175,8 @@ class _CustomAddMealDialogState extends State<CustomAddMealDialog> {
                         ),
                       TextButton(
                         onPressed: _addTypeField,
-                        child: const Text("+ إضافة نوع جديد", style: TextStyle(color: AppColors.amber)),
+                        child: const Text("+ إضافة نوع جديد",
+                            style: TextStyle(color: AppColors.amber)),
                       ),
                     ],
                   ),
@@ -156,11 +193,14 @@ class _CustomAddMealDialogState extends State<CustomAddMealDialog> {
                       border: Border.all(color: AppColors.amber, width: 2),
                     ),
                     child: _image == null
-                        ? const Center(child: Text("اختر صورة", style: TextStyle(color: AppColors.grey1)))
+                        ? const Center(
+                        child: Text("اختر صورة",
+                            style: TextStyle(color: AppColors.grey1)))
                         : ClipOval(
                       child: kIsWeb
                           ? Image.network(_image!.path, fit: BoxFit.cover)
-                          : Image.file(File(_image!.path), fit: BoxFit.cover),
+                          : Image.file(File(_image!.path),
+                          fit: BoxFit.cover),
                     ),
                   ),
                 ),
@@ -171,33 +211,47 @@ class _CustomAddMealDialogState extends State<CustomAddMealDialog> {
                   children: [
                     TextButton(
                       onPressed: () => Navigator.of(context).pop(),
-                      child: const Text('إلغاء', style: TextStyle(color: AppColors.grey1)),
+                      child: const Text('إلغاء',
+                          style: TextStyle(color: AppColors.grey1)),
                     ),
                     ElevatedButton(
-                      style: ElevatedButton.styleFrom(backgroundColor: AppColors.amber),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.amber),
                       onPressed: _image != null
                           ? () {
-                        final typeNames = _typeNameControllers.map((c) => c.text).toList();
-                        final typePrices = _typePriceControllers.map((c) => int.tryParse(c.text) ?? 0).toList();
-                        final typeExtraPrices = _typeExtraPriceControllers.map((c) => int.tryParse(c.text) ?? 0).toList();
+                        final typeNames =
+                        _typeNameControllers.map((c) => c.text).toList();
+                        final typePrices = _typePriceControllers
+                            .map((c) => int.tryParse(c.text) ?? 0)
+                            .toList();
+                        final typeExtraPrices = _typeExtraPriceControllers
+                            .map((c) => int.tryParse(c.text) ?? 0)
+                            .toList();
 
                         widget.onAdd(
                           mealName: _mealNameController.text.trim(),
                           description: _descriptionController.text.trim(),
                           image: _image!,
-                          mainCategoryId: int.parse(_mainCategoryIdController.text),
-                          price: int.parse(_priceController.text),
-                          extraPrice: int.parse(_extraPriceController.text.isEmpty ? "0" : _extraPriceController.text),
-                          tExtraPrice: int.parse(_tExtraPriceController.text.isEmpty ? "0" : _tExtraPriceController.text),
+                          price: int.tryParse(_priceController.text.trim()) ?? 0,
+                          extraPrice: int.tryParse(_extraPriceController.text.trim()) ?? 0,
+                          tExtraPrice: int.tryParse(_tExtraPriceController.text.trim()) ?? 0,
                           hasTypes: _hasTypes ? 1 : 0,
                           typeNames: _hasTypes ? typeNames : null,
                           typePrices: _hasTypes ? typePrices : null,
                           typeExtraPrices: _hasTypes ? typeExtraPrices : null,
+                          // hasTypes: _hasTypes ? 1 : 0,
+                          // typeNames:
+                          // _hasTypes ? typeNames : null,
+                          // typePrices:
+                          // _hasTypes ? typePrices : null,
+                          // typeExtraPrices:
+                          // _hasTypes ? typeExtraPrices : null,
                         );
                         Navigator.of(context).pop();
                       }
                           : null,
-                      child: const Text("إضافة", style: TextStyle(color: Colors.white)),
+                      child: const Text("إضافة",
+                          style: TextStyle(color: Colors.white)),
                     ),
                   ],
                 ),

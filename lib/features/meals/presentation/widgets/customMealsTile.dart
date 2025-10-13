@@ -6,7 +6,6 @@ class CustomMealsTile extends StatelessWidget {
   final String image;
   final String description;
   final VoidCallback onDelete;
-  final VoidCallback onAdd;
 
   const CustomMealsTile({
     super.key,
@@ -14,7 +13,6 @@ class CustomMealsTile extends StatelessWidget {
     required this.image,
     required this.description,
     required this.onDelete,
-    required this.onAdd,
   });
 
   @override
@@ -36,7 +34,7 @@ class CustomMealsTile extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            flex: 2,
+            flex: 3,
             child: Text(
               name,
               style: const TextStyle(
@@ -49,10 +47,9 @@ class CustomMealsTile extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          const SizedBox(width: 12),
 
           Expanded(
-            flex: 4,
+            flex: 3,
             child: Container(
               height: 70,
               width: 70,
@@ -93,10 +90,9 @@ class CustomMealsTile extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 12),
 
           Expanded(
-            flex: 2,
+            flex: 4,
             child: Text(
               description,
               style: const TextStyle(
@@ -109,13 +105,20 @@ class CustomMealsTile extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
           ),
+
           Expanded(
             flex: 2,
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                IconButton(onPressed: onDelete, icon: Icon(Icons.delete,color: Colors.red,)),
-                SizedBox(width: 3,),
-                IconButton(onPressed: onAdd, icon: Icon(Icons.add,color: AppColors.green_,)),
+                IconButton(
+                  onPressed: onDelete,
+                  icon: const Icon(Icons.delete, color: Colors.red),
+                ),
+                // IconButton(
+                //   onPressed: onAdd,
+                //   icon: const Icon(Icons.add, color: AppColors.green_),
+                // ),
               ],
             ),
           ),
