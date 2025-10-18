@@ -22,8 +22,6 @@ class BranchesPage extends StatelessWidget {
     final branchCubit = context.read<BranchCubit>();
     final addbranch = context.read<AddBranchCubit>();
     final editbranch = context.read<EditBranchCubit>();
-
-    // Fetch branches initially
     Future.microtask(() => branchCubit.fetchBranches());
 
     return Scaffold(
@@ -104,7 +102,6 @@ class BranchesPage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Horizontal scroll container (header + list together)
                       SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: SizedBox(
