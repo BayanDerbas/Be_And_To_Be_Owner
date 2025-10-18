@@ -3,11 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../branches/domain/entities/branch_entity.dart';
 
-class CustomAddAdminDialog extends StatelessWidget {
+class CustomAddAdminDialog extends StatefulWidget {
   final TextEditingController nameController;
   final TextEditingController phoneController;
   final TextEditingController passwordController;
-
   final List<BranchEntity> branches;
   final BranchEntity? selectedBranch;
   final Function(BranchEntity) onBranchSelected;
@@ -25,6 +24,19 @@ class CustomAddAdminDialog extends StatelessWidget {
   });
 
   @override
+  State<CustomAddAdminDialog> createState() => _CustomAddAdminDialogState();
+}
+
+class _CustomAddAdminDialogState extends State<CustomAddAdminDialog> {
+  BranchEntity? _selectedBranch;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedBranch = widget.selectedBranch;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: AppColors.smooky,
@@ -38,20 +50,21 @@ class CustomAddAdminDialog extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextField(
-                  controller: nameController,
-                  decoration: InputDecoration(hintText: 'الاسم'),
+                  controller: widget.nameController,
+                  decoration: const InputDecoration(hintText: 'الاسم'),
                 ),
                 const SizedBox(height: 10),
                 TextField(
-                  controller: phoneController,
-                  decoration: InputDecoration(hintText: 'رقم الهاتف'),
+                  controller: widget.phoneController,
+                  decoration: const InputDecoration(hintText: 'رقم الهاتف'),
                 ),
                 const SizedBox(height: 10),
                 TextField(
-                  controller: passwordController,
-                  decoration: InputDecoration(hintText: 'كلمة السر'),
+                  controller: widget.passwordController,
+                  decoration: const InputDecoration(hintText: 'كلمة السر'),
                 ),
                 const SizedBox(height: 10),
+
                 Container(
                   height: 48.h,
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
@@ -61,7 +74,7 @@ class CustomAddAdminDialog extends StatelessWidget {
                     border: Border.all(color: AppColors.amber),
                   ),
                   child: DropdownButton<BranchEntity>(
-                    value: selectedBranch,
+                    value: _selectedBranch,
                     hint: const Text(
                       "اختر الفرع",
                       style: TextStyle(color: AppColors.grey1),
@@ -71,23 +84,24 @@ class CustomAddAdminDialog extends StatelessWidget {
                     dropdownColor: AppColors.smooky2,
                     borderRadius: BorderRadius.circular(10),
                     iconEnabledColor: AppColors.amber,
-                    items: branches.map((branch) {
+                    items: widget.branches.map((branch) {
                       return DropdownMenuItem(
                         value: branch,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4),
-                          child: Text(
-                            branch.branch_name!,
-                            style: const TextStyle(color: Colors.white),
-                          ),
+                        child: Text(
+                          branch.branch_name ?? '',
+                          style: const TextStyle(color: Colors.white),
                         ),
                       );
                     }).toList(),
                     onChanged: (branch) {
-                      if (branch != null) onBranchSelected(branch);
+                      if (branch != null) {
+                        setState(() => _selectedBranch = branch);
+                        widget.onBranchSelected(branch);
+                      }
                     },
                   ),
                 ),
+
                 const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -98,7 +112,7 @@ class CustomAddAdminDialog extends StatelessWidget {
                     ),
                     const SizedBox(width: 10),
                     ElevatedButton(
-                      onPressed: onAdd,
+                      onPressed: widget.onAdd,
                       child: const Text('حفظ', style: TextStyle(color: Colors.white)),
                     ),
                   ],
@@ -111,3 +125,4 @@ class CustomAddAdminDialog extends StatelessWidget {
     );
   }
 }
+

@@ -58,26 +58,26 @@ class MealsPage extends StatelessWidget {
             BlocBuilder<BranchCubit, BranchState>(
               builder: (context, branchState) {
                 final branches =
-                    (branchState is BranchSuccess)
-                        ? branchState.branches.branches
-                        : branchCubit.branches;
+                (branchState is BranchSuccess)
+                    ? branchState.branches.branches
+                    : branchCubit.branches;
 
                 final isLoading = branchState is BranchLoading;
 
                 return isLoading
                     ? const Center(child: CircularProgressIndicator())
                     : CustomDropDown(
-                      value: branchCubit.selectedBranch,
-                      hintText: 'اختر الفرع',
-                      items: branches,
-                      getLabel: (branch) => branch.branch_name ?? '',
-                      onChanged: (branch) {
-                        branchCubit.selectBranch(branch);
-                        if (branch != null) {
-                          categoriesCubit.fetchCategories(branch.id);
-                        }
-                      },
-                    );
+                  value: branchCubit.selectedBranch,
+                  hintText: 'اختر الفرع',
+                  items: branches,
+                  getLabel: (branch) => branch.branch_name ?? '',
+                  onChanged: (branch) {
+                    branchCubit.selectBranch(branch);
+                    if (branch != null) {
+                      categoriesCubit.fetchCategories(branch.id);
+                    }
+                  },
+                );
               },
             ),
             SizedBox(height: 20),
@@ -92,11 +92,11 @@ class MealsPage extends StatelessWidget {
                 return CustomDropDown<CategoryEntity>(
                   value: selectedCategory,
                   hintText:
-                      categories.isEmpty
-                          ? (branchCubit.selectedBranch == null
-                              ? "اختر الفرع أولًا"
-                              : "لا توجد أصناف")
-                          : "اختر صنف",
+                  categories.isEmpty
+                      ? (branchCubit.selectedBranch == null
+                      ? "اختر الفرع أولًا"
+                      : "لا توجد أصناف")
+                      : "اختر صنف",
                   items: categories,
                   getLabel: (category) => category.name,
                   onChanged: (category) {
@@ -114,75 +114,75 @@ class MealsPage extends StatelessWidget {
               child: SizedBox(
                 width: 150,
                 child: ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.smooky2,
-                      padding: EdgeInsets.symmetric(vertical: 8,horizontal: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.r),
-                      ),
-                      side: const BorderSide(
-                        color: AppColors.grey2,
-                        width: 2,
-                      ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.smooky2,
+                    padding: EdgeInsets.symmetric(vertical: 8,horizontal: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.r),
                     ),
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (dialogContext) => CustomAddMealDialog(
-                          onAdd: ({
-                            required String mealName,
-                            required String description,
-                            required XFile image,
-                            required int price,
-                            required int extraPrice,
-                            required int tExtraPrice,
-                            int? hasTypes,
-                            List<String>? typeNames,
-                            List<int>? typePrices,
-                            List<int>? typeExtraPrices,
-                          }) async {
-                            final scaffoldContext = context;
-                            try {
-                              await addMeal.addMeal(
-                                hasTypes: hasTypes,
-                                mealName: mealName,
-                                description: description,
-                                image: image,
-                                mainCategoryId: categoriesCubit.selectedCategory!.id,
-                                price: price,
-                                extraPrice: tExtraPrice,
-                                tExtraPrice: extraPrice,
-                                typeNames: typeNames,
-                                typePrices: typePrices,
-                                typeExtraPrices: typeExtraPrices,
-                              );
-                              ScaffoldMessenger.of(scaffoldContext).showSnackBar(
-                                const SnackBar(
-                                  content: Text("تمت إضافة الوجبة بنجاح ✅"),
-                                  backgroundColor: AppColors.smooky2,
-                                  duration: Duration(seconds: 2),
-                                ),
-                              );
-                              mealsCubit.fetchMeals(categoriesCubit.selectedCategory?.id ?? 0);
-                            } catch (e) {
-                              ScaffoldMessenger.of(scaffoldContext).showSnackBar(
-                                SnackBar(
-                                  content: Text("حدث خطأ أثناء الإضافة ❌: $e"),
-                                  backgroundColor: Colors.red,
-                                  duration: const Duration(seconds: 2),
-                                ),
-                              );
-                            }
-                          },
-                        ),
-                      );
-                    },
-                    icon: const Icon(Icons.add, color: Colors.white),
-                    label: const Text(
-                      "إضافة وجبة",
-                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    side: const BorderSide(
+                      color: AppColors.grey2,
+                      width: 2,
                     ),
                   ),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (dialogContext) => CustomAddMealDialog(
+                        onAdd: ({
+                          required String mealName,
+                          required String description,
+                          required XFile image,
+                          required int price,
+                          required int extraPrice,
+                          required int tExtraPrice,
+                          int? hasTypes,
+                          List<String>? typeNames,
+                          List<int>? typePrices,
+                          List<int>? typeExtraPrices,
+                        }) async {
+                          final scaffoldContext = context;
+                          try {
+                            await addMeal.addMeal(
+                              hasTypes: hasTypes,
+                              mealName: mealName,
+                              description: description,
+                              image: image,
+                              mainCategoryId: categoriesCubit.selectedCategory!.id,
+                              price: price,
+                              extraPrice: tExtraPrice,
+                              tExtraPrice: extraPrice,
+                              typeNames: typeNames,
+                              typePrices: typePrices,
+                              typeExtraPrices: typeExtraPrices,
+                            );
+                            ScaffoldMessenger.of(scaffoldContext).showSnackBar(
+                              const SnackBar(
+                                content: Text("تمت إضافة الوجبة بنجاح ✅"),
+                                backgroundColor: AppColors.smooky2,
+                                duration: Duration(seconds: 2),
+                              ),
+                            );
+                            mealsCubit.fetchMeals(categoriesCubit.selectedCategory?.id ?? 0);
+                          } catch (e) {
+                            ScaffoldMessenger.of(scaffoldContext).showSnackBar(
+                              SnackBar(
+                                content: Text("حدث خطأ أثناء الإضافة ❌: $e"),
+                                backgroundColor: Colors.red,
+                                duration: const Duration(seconds: 2),
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.add, color: Colors.white),
+                  label: const Text(
+                    "إضافة وجبة",
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                ),
               ),
             ),
             SizedBox(height: 20),
@@ -201,24 +201,24 @@ class MealsPage extends StatelessWidget {
                         return GestureDetector(
                           onTap: () async {
                             final mealTypesCubit =
-                                context.read<MealTypesCubit>();
+                            context.read<MealTypesCubit>();
                             await mealTypesCubit.getMealsTypes(meal.id);
                             final typeState = mealTypesCubit.state;
 
                             if (typeState is MealTypesSuccess) {
                               final mealsWithTypes =
-                                  typeState.meals.cast<MealWithTypesEntity>();
+                              typeState.meals.cast<MealWithTypesEntity>();
                               final mealWithType = mealsWithTypes.firstWhere(
-                                (m) => m.id == meal.id,
+                                    (m) => m.id == meal.id,
                                 orElse:
                                     () => MealWithTypesEntity(
-                                      meal.id,
-                                      meal.name,
-                                      meal.image,
-                                      meal.description,
-                                      meal.maincategory_id,
-                                      [],
-                                    ),
+                                  meal.id,
+                                  meal.name,
+                                  meal.image,
+                                  meal.description,
+                                  meal.maincategory_id,
+                                  [],
+                                ),
                               );
 
                               if (mealWithType.types != null &&
@@ -228,102 +228,102 @@ class MealsPage extends StatelessWidget {
                                   context: context,
                                   builder:
                                       (dialogContext) => MealTypesDialog(
-                                        mealName: mealWithType.name,
-                                        mealImage: mealWithType.image,
-                                        description: mealWithType.description,
-                                        price: type.price,
-                                        extraPrice: type.supportprice,
-                                        availble: type.available.toString(),
-                                        onDelete: () async {
-                                          final scaffoldContext = context;
-                                          try {
-                                            await deleteType.deleteType(
-                                              type.id,
-                                            );
+                                    mealName: mealWithType.name,
+                                    mealImage: mealWithType.image,
+                                    description: mealWithType.description,
+                                    price: type.price,
+                                    extraPrice: type.supportprice,
+                                    availble: type.available.toString(),
+                                    onDelete: () async {
+                                      final scaffoldContext = context;
+                                      try {
+                                        await deleteType.deleteType(
+                                          type.id,
+                                        );
 
-                                            ScaffoldMessenger.of(
-                                              scaffoldContext,
-                                            ).showSnackBar(
-                                              const SnackBar(
-                                                content: Text(
-                                                  "تم حذف النوع بنجاح ✅",
-                                                ),
-                                                backgroundColor:
-                                                    AppColors.smooky2,
-                                                duration: Duration(seconds: 2),
-                                              ),
-                                            );
-                                            final mealTypesCubit =
-                                                context.read<MealTypesCubit>();
-                                            await mealTypesCubit.getMealsTypes(
-                                              meal.id,
-                                            );
-                                          } catch (e) {
-                                            ScaffoldMessenger.of(
-                                              scaffoldContext,
-                                            ).showSnackBar(
-                                              SnackBar(
-                                                content: Text(
-                                                  "حدث خطأ أثناء الحذف ❌: $e",
-                                                ),
-                                                backgroundColor: Colors.red,
-                                                duration: const Duration(
-                                                  seconds: 2,
-                                                ),
-                                              ),
-                                            );
-                                          }
-                                        },
-                                        onEdit: (int newPrice, int newExtraPrice) async {
-                                          final editPriceCubit = context.read<EditPriceCubit>();
-                                          final scaffoldContext = context;
-                                          try {
-                                            await editPriceCubit.editPrice(type.id, newPrice, newExtraPrice);
-                                            final state = editPriceCubit.state;
-                                            if (state is EditPriceSuccess) {
-                                              ScaffoldMessenger.of(scaffoldContext).showSnackBar(
-                                                const SnackBar(
-                                                  content: Text("تم تعديل السعر بنجاح ✅"),
-                                                  backgroundColor: AppColors.smooky2,
-                                                  duration: Duration(seconds: 2),
-                                                ),
-                                              );
-                                              final mealTypesCubit = context.read<MealTypesCubit>();
-                                              await mealTypesCubit.getMealsTypes(meal.id);
-                                              final mealsCubit = context.read<MealsCubit>();
-                                              mealsCubit.fetchMeals(categoriesCubit.selectedCategory?.id ?? 0);
-                                            } else if (state is EditPriceFailure) {
-                                              ScaffoldMessenger.of(scaffoldContext).showSnackBar(
-                                                SnackBar(
-                                                  content: Text("فشل تعديل السعر ❌: ${state.message}"),
-                                                  backgroundColor: Colors.red,
-                                                  duration: const Duration(seconds: 2),
-                                                ),
-                                              );
-                                            }
-                                          } catch (e) {
-                                            ScaffoldMessenger.of(scaffoldContext).showSnackBar(
-                                              SnackBar(
-                                                content: Text("حدث خطأ أثناء تعديل السعر ❌: $e"),
-                                                backgroundColor: Colors.red,
-                                                duration: const Duration(seconds: 2),
-                                              ),
-                                            );
-                                          }
-                                        },
-                                      ),
+                                        ScaffoldMessenger.of(
+                                          scaffoldContext,
+                                        ).showSnackBar(
+                                          const SnackBar(
+                                            content: Text(
+                                              "تم حذف النوع بنجاح ✅",
+                                            ),
+                                            backgroundColor:
+                                            AppColors.smooky2,
+                                            duration: Duration(seconds: 2),
+                                          ),
+                                        );
+                                        final mealTypesCubit =
+                                        context.read<MealTypesCubit>();
+                                        await mealTypesCubit.getMealsTypes(
+                                          meal.id,
+                                        );
+                                      } catch (e) {
+                                        ScaffoldMessenger.of(
+                                          scaffoldContext,
+                                        ).showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              "حدث خطأ أثناء الحذف ❌: $e",
+                                            ),
+                                            backgroundColor: Colors.red,
+                                            duration: const Duration(
+                                              seconds: 2,
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                    },
+                                    onEdit: (int newPrice, int newExtraPrice) async {
+                                      final editPriceCubit = context.read<EditPriceCubit>();
+                                      final scaffoldContext = context;
+                                      try {
+                                        await editPriceCubit.editPrice(type.id, newPrice, newExtraPrice);
+                                        final state = editPriceCubit.state;
+                                        if (state is EditPriceSuccess) {
+                                          ScaffoldMessenger.of(scaffoldContext).showSnackBar(
+                                            const SnackBar(
+                                              content: Text("تم تعديل السعر بنجاح ✅"),
+                                              backgroundColor: AppColors.smooky2,
+                                              duration: Duration(seconds: 2),
+                                            ),
+                                          );
+                                          final mealTypesCubit = context.read<MealTypesCubit>();
+                                          await mealTypesCubit.getMealsTypes(meal.id);
+                                          final mealsCubit = context.read<MealsCubit>();
+                                          mealsCubit.fetchMeals(categoriesCubit.selectedCategory?.id ?? 0);
+                                        } else if (state is EditPriceFailure) {
+                                          ScaffoldMessenger.of(scaffoldContext).showSnackBar(
+                                            SnackBar(
+                                              content: Text("فشل تعديل السعر ❌: ${state.message}"),
+                                              backgroundColor: Colors.red,
+                                              duration: const Duration(seconds: 2),
+                                            ),
+                                          );
+                                        }
+                                      } catch (e) {
+                                        ScaffoldMessenger.of(scaffoldContext).showSnackBar(
+                                          SnackBar(
+                                            content: Text("حدث خطأ أثناء تعديل السعر ❌: $e"),
+                                            backgroundColor: Colors.red,
+                                            duration: const Duration(seconds: 2),
+                                          ),
+                                        );
+                                      }
+                                    },
+                                  ),
                                 );
                               } else {
                                 showDialog(
                                   context: context,
                                   builder:
                                       (_) => const AlertDialog(
-                                        backgroundColor: AppColors.smooky,
-                                        content: Text(
-                                          "لا توجد أنواع متاحة لهذه الوجبة 🍽️",
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ),
+                                    backgroundColor: AppColors.smooky,
+                                    content: Text(
+                                      "لا توجد أنواع متاحة لهذه الوجبة 🍽️",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
                                 );
                               }
                             } else if (typeState is MealTypesFailure) {
@@ -331,14 +331,14 @@ class MealsPage extends StatelessWidget {
                                 context: context,
                                 builder:
                                     (_) => AlertDialog(
-                                      backgroundColor: AppColors.smooky,
-                                      content: Text(
-                                        "حدث خطأ أثناء جلب الأنواع: ${typeState.message}",
-                                        style: const TextStyle(
-                                          color: Colors.redAccent,
-                                        ),
-                                      ),
+                                  backgroundColor: AppColors.smooky,
+                                  content: Text(
+                                    "حدث خطأ أثناء جلب الأنواع: ${typeState.message}",
+                                    style: const TextStyle(
+                                      color: Colors.redAccent,
                                     ),
+                                  ),
+                                ),
                               );
                             }
                           },
